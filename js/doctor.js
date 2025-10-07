@@ -15,6 +15,8 @@ function generatePrescriptionId(dataString) {
 async function handlePrescriptionSubmission(e) {
     e.preventDefault();
     
+    console.log('✅ handlePrescriptionSubmission called successfully!');
+    
     // Patient Information
     const patientName = document.getElementById('patient-name').value;
     const patientAge = document.getElementById('patient-age').value;
@@ -74,54 +76,92 @@ async function handlePrescriptionSubmission(e) {
         // Reset form
         resetPrescriptionForm();
         
+        // Reload dashboard data
+        reloadDashboardData();
+        
+        console.log('✅ Prescription creation completed successfully');
+        
     } catch (error) {
-        console.error('Error creating prescription:', error);
+        console.error('❌ Error creating prescription:', error);
         alert('Error creating prescription: ' + error.message);
     }
+    
+    // CRITICAL: Always return false to prevent any form submission
+    return false;
 }
 
 // Show success message with prescription ID
 function showSuccessMessage(prescriptionId) {
-    // Get or create success message container
-    let successContainer = document.getElementById('success-message');
-    if (!successContainer) {
-        successContainer = document.createElement('div');
-        successContainer.id = 'success-message';
-        successContainer.className = 'success-message';
-        
-        // Insert after the form
-        const formContainer = document.querySelector('.prescription-form-container');
-        formContainer.appendChild(successContainer);
-    }
+    console.log('showSuccessMessage called with ID:', prescriptionId);
     
-    // Display success message with copyable prescription ID
-    successContainer.innerHTML = `
-        <div class="success-content">
-            <h4>✅ Prescription Created Successfully!</h4>
-            <p>Prescription ID:</p>
-            <div class="prescription-id-display">
-                <code id="prescription-id-text">${prescriptionId}</code>
-                <button type="button" class="btn btn-copy" onclick="copyPrescriptionId('${prescriptionId}')">Copy ID</button>
+    // Create a modal overlay
+    const modalHTML = `
+        <div id="prescription-id-modal" class="prescription-modal-overlay">
+            <div class="prescription-modal">
+                <div class="prescription-modal-header">
+                    <h3>✅ Prescription Created!</h3>
+                    <button class="prescription-modal-close" onclick="closePrescriptionIDModal()">&times;</button>
+                </div>
+                <div class="prescription-modal-body">
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">Share this ID with the patient:</p>
+                    <div class="prescription-id-box">
+                        <code id="prescription-id-text">${prescriptionId}</code>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="copyPrescriptionId('${prescriptionId}')" style="width: 100%; margin-top: 1rem;">
+                        📋 Copy Prescription ID
+                    </button>
+                    <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-secondary); text-align: center;">
+                        Patient needs this ID for pharmacy verification
+                    </p>
+                </div>
             </div>
-            <p class="instruction">Give this ID to the patient for pharmacy verification.</p>
         </div>
     `;
     
-    // Auto-hide after 10 seconds
-    setTimeout(() => {
-        successContainer.style.display = 'none';
-    }, 10000);
+    console.log('Modal HTML created');
     
-    // Show the container
-    successContainer.style.display = 'block';
+    // Remove existing modal if any
+    const existingModal = document.getElementById('prescription-id-modal');
+    if (existingModal) {
+        console.log('Removing existing modal');
+        existingModal.remove();
+    }
+    
+    // Add modal to body
+    console.log('Adding modal to body');
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Verify modal was added
+    const addedModal = document.getElementById('prescription-id-modal');
+    console.log('Modal added to DOM:', addedModal ? 'YES' : 'NO');
+    if (addedModal) {
+        console.log('Modal element:', addedModal);
+        console.log('Modal display:', window.getComputedStyle(addedModal).display);
+        console.log('Modal z-index:', window.getComputedStyle(addedModal).zIndex);
+        console.log('Modal opacity:', window.getComputedStyle(addedModal).opacity);
+    }
+    
+    // Show modal immediately for testing, then add animation class
+    const modal = document.getElementById('prescription-id-modal');
+    if (modal) {
+        console.log('Adding show class immediately');
+        modal.classList.add('show');
+        console.log('Show class added, modal should be visible');
+        console.log('Modal classes:', modal.className);
+    }
+}
+
+// Close prescription ID modal
+window.closePrescriptionIDModal = function() {
+    const modal = document.getElementById('prescription-id-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
 }
 
 // Copy prescription ID to clipboard
 window.copyPrescriptionId = function(prescriptionId) {
-    // Prevent form submission
-    event.preventDefault();
-    event.stopPropagation();
-    
     // Try clipboard API first
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(prescriptionId).then(() => {
@@ -136,14 +176,14 @@ window.copyPrescriptionId = function(prescriptionId) {
     }
     
     function showCopySuccess() {
-        const copyBtn = document.querySelector('.btn-copy');
+        const copyBtn = event.target;
         const originalText = copyBtn.textContent;
         copyBtn.textContent = '✓ Copied!';
         copyBtn.style.background = '#28a745';
         
         setTimeout(() => {
             copyBtn.textContent = originalText;
-            copyBtn.style.background = '#6c757d';
+            copyBtn.style.background = '';
         }, 2000);
     }
     
@@ -168,7 +208,7 @@ window.copyPrescriptionId = function(prescriptionId) {
         document.body.removeChild(textArea);
     }
     
-    return false; // Prevent any form submission
+    return false;
 };
 
 // Real-time prescription monitoring
@@ -348,26 +388,25 @@ async function loadRecentPrescriptions() {
         prescriptions = prescriptions.slice(0, 5);
         
         let prescriptionsHTML = '';
-        prescriptions.forEach((data) => {
-            const data = doc.data();
-            console.log('Prescription data:', data);
+        prescriptions.forEach((prescription) => {
+            console.log('Prescription data:', prescription);
             
-            const issueDate = new Date(data.issueDate).toLocaleDateString();
-            const statusClass = data.status === 'active' ? 'status-active' : 'status-filled';
+            const issueDate = new Date(prescription.issueDate).toLocaleDateString();
+            const statusClass = prescription.status === 'active' ? 'status-active' : 'status-filled';
             
             // Handle both old and new data structures
-            const patientName = data.patient ? data.patient.name : data.patientName;
+            const patientName = prescription.patient ? prescription.patient.name : prescription.patientName;
             
             // Handle medications array or single medication
             let medicationsDisplay = '';
-            if (data.medications && Array.isArray(data.medications)) {
-                medicationsDisplay = data.medications.map(med => 
-                    `${med.name}${med.dosage ? ` (${med.dosage})` : ''} - ${med.frequency}`
+            if (prescription.medications && Array.isArray(prescription.medications)) {
+                medicationsDisplay = prescription.medications.map(med => 
+                    `${med.name}${med.strength ? ` (${med.strength})` : ''} - ${med.frequency}`
                 ).join(', ');
             } else {
                 // Old format fallback
-                const medicationName = data.medication ? data.medication.name : data.medication;
-                const dosageInfo = data.medication ? data.medication.dosage : data.dosage;
+                const medicationName = prescription.medication ? prescription.medication.name : prescription.medication;
+                const dosageInfo = prescription.medication ? prescription.medication.dosage : prescription.dosage;
                 medicationsDisplay = `${medicationName}${dosageInfo ? ` - ${dosageInfo}` : ''}`;
             }
             
@@ -375,13 +414,13 @@ async function loadRecentPrescriptions() {
                 <div class="prescription-item">
                     <div class="prescription-header">
                         <strong>${patientName}</strong>
-                        <span class="prescription-status ${statusClass}">${data.status.toUpperCase()}</span>
+                        <span class="prescription-status ${statusClass}">${prescription.status.toUpperCase()}</span>
                     </div>
                     <div class="prescription-details">
-                        <p><strong>ID:</strong> <code class="prescription-id">${data.prescriptionId}</code></p>
+                        <p><strong>ID:</strong> <code class="prescription-id">${prescription.prescriptionId}</code></p>
                         <p><strong>Medications:</strong> ${medicationsDisplay}</p>
                         <p><strong>Date:</strong> ${issueDate}</p>
-                        ${data.diagnosis ? `<p><strong>Diagnosis:</strong> ${data.diagnosis}</p>` : ''}
+                        ${prescription.diagnosis ? `<p><strong>Diagnosis:</strong> ${prescription.diagnosis}</p>` : ''}
                     </div>
                 </div>
             `;
@@ -440,121 +479,102 @@ if (typeof window.showDoctorView === 'function') {
     };
 }
 
-// Reload recent prescriptions after creating a new one
-const originalShowSuccessMessage = showSuccessMessage;
-showSuccessMessage = function(prescriptionId) {
-    originalShowSuccessMessage(prescriptionId);
+// Function to reload data after prescription creation
+function reloadDashboardData() {
     setTimeout(() => {
         loadRecentPrescriptions();
         updateDoctorStats();
     }, 1000);
-};
+}
 
-// Initialize medication form and dashboard when DOM loads
+// SINGLE UNIFIED INITIALIZATION - Replaces all other DOMContentLoaded listeners
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Initializing doctor dashboard...');
+    console.log('🚀 DOM Content Loaded - Starting unified initialization...');
     
-    // Initialize prescription form event listener
+    // Step 1: Initialize prescription form event listener
     const prescriptionForm = document.getElementById('prescription-form');
     if (prescriptionForm) {
         prescriptionForm.addEventListener('submit', handlePrescriptionSubmission);
-        console.log('Prescription form event listener attached');
+        console.log('✅ Prescription form event listener attached');
     }
     
-    // Initialize medication form with enhanced robust approach
-    enhancedMedicationInit();
+    // Step 2: Initialize Add Medication button with retry logic
+    let initAttempts = 0;
+    const maxAttempts = 10;
     
-    // Also run the original initialization as backup
-    const initWithRetry = (attempts = 0) => {
-        if (attempts > 5) {
-            console.error('Failed to initialize medication form after 5 attempts');
-            return;
-        }
+    function initializeAddMedicationButton() {
+        initAttempts++;
+        console.log(`🔄 Medication button initialization attempt ${initAttempts}/${maxAttempts}`);
         
         const addButton = document.getElementById('add-medication-btn');
         const container = document.getElementById('medications-container');
         
         if (addButton && container) {
-            initializeMedicationForm();
+            console.log('✅ Found medication button and container');
+            
+            // Clear any existing listeners
+            addButton.onclick = null;
+            
+            // Add event listener
+            addButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🎯 Add medication button clicked!');
+                addMedicationRow();
+            });
+            
+            // Add initial medication row if container is empty
+            if (container.children.length === 0) {
+                console.log('📝 Adding initial medication row...');
+                addMedicationRow();
+            }
+            
+            console.log('✅ Medication button initialization complete');
+            return true;
         } else {
-            console.log(`Retry attempt ${attempts + 1} - elements not ready yet`);
-            setTimeout(() => initWithRetry(attempts + 1), 200);
+            if (initAttempts < maxAttempts) {
+                console.log(`⏳ Elements not ready, retrying in 200ms...`);
+                setTimeout(initializeAddMedicationButton, 200);
+            } else {
+                console.error('❌ Failed to initialize medication button after maximum attempts');
+            }
+            return false;
         }
-    };
+    }
     
-    setTimeout(() => initWithRetry(), 300);
+    // Start medication button initialization
+    setTimeout(initializeAddMedicationButton, 100);
     
-    // Wait for auth state to be ready before initializing dashboard
-    const checkAuthAndInit = () => {
+    // Step 3: Initialize prescriptions manager if elements exist
+    setTimeout(() => {
+        if (document.getElementById('prescriptions-list')) {
+            console.log('📋 Initializing prescriptions manager...');
+            window.prescriptionsManager = new PrescriptionsManager();
+        }
+    }, 500);
+    
+    // Step 4: Initialize dashboard data when auth is ready
+    setTimeout(() => {
         if (auth.currentUser) {
+            console.log('👤 User authenticated, loading dashboard data...');
             loadRecentPrescriptions();
             updateDoctorStats();
         } else {
-            // Wait a bit more if auth is still loading
-            setTimeout(checkAuthAndInit, 500);
+            console.log('⏳ Waiting for authentication...');
+            // Set up auth state listener
+            const authUnsubscribe = auth.onAuthStateChanged((user) => {
+                if (user) {
+                    console.log('👤 User authenticated via listener, loading dashboard data...');
+                    loadRecentPrescriptions();
+                    updateDoctorStats();
+                    authUnsubscribe(); // Unsubscribe after first successful load
+                }
+            });
         }
-    };
-    
-    // Start checking after a short delay to allow auth to initialize
-    setTimeout(checkAuthAndInit, 1000);
+    }, 1000);
 });
 
-// Fallback initialization for when DOMContentLoaded might have already fired
-if (document.readyState === 'loading') {
-    // Document is still loading, DOMContentLoaded will fire
-} else {
-    // Document is already loaded, run initialization immediately
-    console.log('Document already loaded - running immediate initialization');
-    setTimeout(() => {
-        const prescriptionForm = document.getElementById('prescription-form');
-        if (prescriptionForm) {
-            prescriptionForm.addEventListener('submit', handlePrescriptionSubmission);
-        }
-        initializeMedicationForm();
-    }, 100);
-}
-
-// Initialize medication form with first row
-function initializeMedicationForm() {
-    console.log('Initializing medication form...');
-    const addButton = document.getElementById('add-medication-btn');
-    const container = document.getElementById('medications-container');
-    
-    console.log('Add button found:', !!addButton);
-    console.log('Container found:', !!container);
-    
-    if (addButton && container) {
-        // Remove any existing event listeners to prevent duplicates
-        addButton.removeEventListener('click', addMedicationRow);
-        
-        // Create a wrapper function to handle the event properly
-        const handleAddMedication = function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            console.log('Add medication button clicked!');
-            addMedicationRow(event);
-        };
-        
-        addButton.addEventListener('click', handleAddMedication);
-        
-        // Also try using onclick as a fallback
-        addButton.onclick = handleAddMedication;
-        
-        console.log('Event listener attached to add medication button');
-        console.log('Button type:', addButton.type);
-        console.log('Button disabled:', addButton.disabled);
-        
-        // Add first medication row if container is empty
-        if (container.children.length === 0) {
-            console.log('Adding initial medication row...');
-            addMedicationRow();
-        }
-    } else {
-        console.error('Failed to initialize medication form - missing elements');
-        if (!addButton) console.error('Add button not found with ID: add-medication-btn');
-        if (!container) console.error('Container not found with ID: medications-container');
-    }
-}
+// Legacy function - replaced by unified initialization above
 
 // Add a new medication row
 function addMedicationRow(event) {
@@ -621,23 +641,51 @@ function updateMedicationNumbers() {
 
 // Collect all medication data from rows
 function collectMedicationsData() {
+    console.log('💊 Collecting medications data...');
     const medications = [];
     const rows = document.querySelectorAll('.medication-row');
+    console.log('📊 Found medication rows:', rows.length);
     
-    rows.forEach(row => {
-        const name = row.querySelector('.medicine-name').value.trim();
-        const dosage = row.querySelector('.medicine-dosage').value.trim();
-        const frequency = row.querySelector('.medicine-frequency').value.trim();
+    if (rows.length === 0) {
+        console.warn('⚠️ No medication rows found! Adding initial row...');
+        addMedicationRow();
+        // Re-query for rows after adding
+        const newRows = document.querySelectorAll('.medication-row');
+        console.log('📊 Rows after adding initial:', newRows.length);
+    }
+    
+    const finalRows = document.querySelectorAll('.medication-row');
+    finalRows.forEach((row, index) => {
+        const nameInput = row.querySelector('.medicine-name');
+        const dosageInput = row.querySelector('.medicine-dosage');
+        const frequencyInput = row.querySelector('.medicine-frequency');
         
-        if (name && frequency) { // Only add if required fields are filled
-            medications.push({
-                name: name,
-                strength: dosage || null,
-                frequency: frequency
-            });
+        console.log(`Row ${index + 1}:`, {
+            nameInput: !!nameInput,
+            dosageInput: !!dosageInput,
+            frequencyInput: !!frequencyInput
+        });
+        
+        if (nameInput && dosageInput && frequencyInput) {
+            const name = nameInput.value.trim();
+            const dosage = dosageInput.value.trim();
+            const frequency = frequencyInput.value.trim();
+            
+            console.log(`Row ${index + 1} data:`, { name, dosage, frequency });
+            
+            if (name && frequency) { // Only add if required fields are filled
+                medications.push({
+                    name: name,
+                    strength: dosage || null,
+                    frequency: frequency
+                });
+            }
+        } else {
+            console.error(`❌ Missing input elements in row ${index + 1}`);
         }
     });
     
+    console.log('✅ Final medications array:', medications);
     return medications;
 }
 
@@ -746,8 +794,8 @@ class PrescriptionsManager {
             const prescriptionsRef = collection(db, 'prescriptions');
             const q = query(
                 prescriptionsRef,
-                where('doctorId', '==', auth.currentUser.uid),
-                orderBy('createdAt', 'desc')
+                where('doctorId', '==', auth.currentUser.uid)
+                // Note: Removed orderBy to avoid index requirement - will sort client-side
             );
             
             onSnapshot(q, (snapshot) => {
@@ -757,6 +805,13 @@ class PrescriptionsManager {
                         id: doc.id,
                         ...doc.data()
                     });
+                });
+                
+                // Sort by issue date client-side
+                this.prescriptions.sort((a, b) => {
+                    const dateA = new Date(a.issueDate || 0);
+                    const dateB = new Date(b.issueDate || 0);
+                    return dateB - dateA;
                 });
                 
                 this.filterPrescriptions();
@@ -782,7 +837,8 @@ class PrescriptionsManager {
             filtered = filtered.filter(prescription => {
                 switch (this.currentFilter) {
                     case 'recent':
-                        return new Date(prescription.createdAt.toDate()) >= sevenDaysAgo;
+                        const prescriptionDate = new Date(prescription.issueDate);
+                        return prescriptionDate >= sevenDaysAgo;
                     case 'active':
                         return prescription.status === 'active';
                     case 'completed':
@@ -796,12 +852,16 @@ class PrescriptionsManager {
         // Apply search filter
         if (this.searchTerm) {
             filtered = filtered.filter(prescription => {
+                const patientName = prescription.patient ? prescription.patient.name : prescription.patientName || '';
+                const prescriptionId = prescription.prescriptionId || '';
+                const medicationsMatch = prescription.medications && Array.isArray(prescription.medications) 
+                    ? prescription.medications.some(med => med.name.toLowerCase().includes(this.searchTerm))
+                    : false;
+                
                 return (
-                    prescription.patientName.toLowerCase().includes(this.searchTerm) ||
-                    prescription.prescriptionId.toString().includes(this.searchTerm) ||
-                    prescription.medications.some(med => 
-                        med.name.toLowerCase().includes(this.searchTerm)
-                    )
+                    patientName.toLowerCase().includes(this.searchTerm) ||
+                    prescriptionId.toString().includes(this.searchTerm) ||
+                    medicationsMatch
                 );
             });
         }
@@ -841,7 +901,7 @@ class PrescriptionsManager {
     }
     
     createPrescriptionCard(prescription) {
-        const createdDate = prescription.createdAt.toDate();
+        const createdDate = prescription.issueDate ? new Date(prescription.issueDate) : new Date();
         const formattedDate = createdDate.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
@@ -851,12 +911,20 @@ class PrescriptionsManager {
         const status = this.determineStatus(prescription);
         const statusClass = status.toLowerCase();
         
-        const medicationsHTML = prescription.medications.map(med => `
-            <div class="medication-item">
-                <span class="medication-name">${med.name}</span>
-                <span class="medication-dosage">${med.strength} - ${med.frequency}</span>
-            </div>
-        `).join('');
+        // Handle patient data safely
+        const patientName = prescription.patient ? prescription.patient.name : prescription.patientName || 'Unknown Patient';
+        const patientAge = prescription.patient ? prescription.patient.age : prescription.patientAge;
+        const patientGender = prescription.patient ? prescription.patient.gender : prescription.patientGender;
+        const patientContact = prescription.patient ? prescription.patient.contact : prescription.patientContact;
+        
+        const medicationsHTML = prescription.medications && prescription.medications.length > 0 
+            ? prescription.medications.map(med => `
+                <div class="medication-item">
+                    <span class="medication-name">${med.name}</span>
+                    <span class="medication-dosage">${med.strength || ''} - ${med.frequency}</span>
+                </div>
+            `).join('')
+            : '<div class="medication-item">No medications listed</div>';
         
         return `
             <div class="prescription-card" data-id="${prescription.id}">
@@ -866,11 +934,11 @@ class PrescriptionsManager {
                 </div>
                 
                 <div class="prescription-patient">
-                    <h4>${prescription.patientName}</h4>
+                    <h4>${patientName}</h4>
                     <div class="prescription-patient-info">
-                        ${prescription.patientAge ? `Age: ${prescription.patientAge}` : ''} 
-                        ${prescription.patientGender ? `• ${prescription.patientGender}` : ''}
-                        ${prescription.contactNumber ? `• ${prescription.contactNumber}` : ''}
+                        ${patientAge ? `Age: ${patientAge}` : ''} 
+                        ${patientGender ? `• ${patientGender}` : ''}
+                        ${patientContact ? `• ${patientContact}` : ''}
                     </div>
                 </div>
                 
@@ -911,7 +979,7 @@ class PrescriptionsManager {
     determineStatus(prescription) {
         // Simple status determination - can be enhanced based on your needs
         const now = new Date();
-        const createdDate = prescription.createdAt.toDate();
+        const createdDate = new Date(prescription.issueDate || Date.now());
         const daysSinceCreated = (now - createdDate) / (1000 * 60 * 60 * 24);
         
         if (prescription.status === 'filled') return 'Filled';
@@ -991,175 +1059,56 @@ class PrescriptionsManager {
     }
 }
 
-// Initialize prescriptions manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('prescriptions-list')) {
-        window.prescriptionsManager = new PrescriptionsManager();
-    }
-});
+// (Moved to main initialization)
 
-// ROBUST BUTTON INITIALIZATION - Multiple approaches
-function initializeMedicationButtonRobust() {
-    console.log('🔧 ROBUST: Initializing medication button with multiple approaches...');
-    
-    const addButton = document.getElementById('add-medication-btn');
-    if (!addButton) {
-        console.error('❌ ROBUST: Button not found!');
-        return false;
-    }
-    
-    console.log('✅ ROBUST: Button found:', addButton);
-    
-    // Approach 1: Standard addEventListener
-    try {
-        addButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('🎯 ROBUST: Button clicked via addEventListener!');
-            addMedicationRow(e);
-        });
-        console.log('✅ ROBUST: addEventListener attached');
-    } catch (err) {
-        console.error('❌ ROBUST: addEventListener failed:', err);
-    }
-    
-    // Approach 2: onclick property
-    try {
-        addButton.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('🎯 ROBUST: Button clicked via onclick!');
-            addMedicationRow(e);
-            return false;
-        };
-        console.log('✅ ROBUST: onclick attached');
-    } catch (err) {
-        console.error('❌ ROBUST: onclick failed:', err);
-    }
-    
-    // Approach 3: Set up delegation on parent
-    try {
-        const parent = addButton.parentElement;
-        if (parent) {
-            parent.addEventListener('click', function(e) {
-                if (e.target && e.target.id === 'add-medication-btn') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('🎯 ROBUST: Button clicked via delegation!');
-                    addMedicationRow(e);
-                }
-            });
-            console.log('✅ ROBUST: Parent delegation attached');
-        }
-    } catch (err) {
-        console.error('❌ ROBUST: Parent delegation failed:', err);
-    }
-    
-    // Approach 4: Make button focusable and add keyboard support
-    try {
-        addButton.tabIndex = 0;
-        addButton.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                console.log('🎯 ROBUST: Button activated via keyboard!');
-                addMedicationRow(e);
-            }
-        });
-        console.log('✅ ROBUST: Keyboard support added');
-    } catch (err) {
-        console.error('❌ ROBUST: Keyboard support failed', err);
-    }
-    
-    // Test button properties
-    console.log('🔍 ROBUST: Button properties:');
-    console.log('  - disabled:', addButton.disabled);
-    console.log('  - style.display:', addButton.style.display);
-    console.log('  - computed display:', window.getComputedStyle(addButton).display);
-    console.log('  - computed visibility:', window.getComputedStyle(addButton).visibility);
-    console.log('  - computed pointer-events:', window.getComputedStyle(addButton).pointerEvents);
-    console.log('  - offsetWidth:', addButton.offsetWidth);
-    console.log('  - offsetHeight:', addButton.offsetHeight);
-    
-    return true;
-}
-
-// Enhanced DOM ready with multiple initialization attempts
-function enhancedMedicationInit() {
-    console.log('🚀 ENHANCED: Starting enhanced medication initialization...');
-    
-    // Try immediate initialization
-    if (initializeMedicationButtonRobust()) {
-        console.log('✅ ENHANCED: Immediate initialization successful');
-        return;
-    }
-    
-    // Try with small delay
+// Fallback initialization for when DOMContentLoaded might have already fired
+if (document.readyState !== 'loading') {
+    // Document is already loaded, run initialization immediately
+    console.log('📄 Document already loaded - running immediate initialization');
     setTimeout(() => {
-        console.log('🔄 ENHANCED: Trying initialization after 100ms...');
-        if (initializeMedicationButtonRobust()) {
-            console.log('✅ ENHANCED: Delayed initialization successful');
-            return;
+        const prescriptionForm = document.getElementById('prescription-form');
+        if (prescriptionForm && !prescriptionForm.dataset.initialized) {
+            prescriptionForm.addEventListener('submit', handlePrescriptionSubmission);
+            prescriptionForm.dataset.initialized = 'true';
         }
         
-        // Try with longer delay
-        setTimeout(() => {
-            console.log('🔄 ENHANCED: Trying initialization after 500ms...');
-            if (initializeMedicationButtonRobust()) {
-                console.log('✅ ENHANCED: Final delayed initialization successful');
-            } else {
-                console.error('❌ ENHANCED: All initialization attempts failed!');
-            }
-        }, 500);
-    }, 100);
-}
-
-// SIMPLE AND BULLETPROOF BUTTON INITIALIZATION
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔧 SIMPLE INIT: Starting simple button initialization...');
-    
-    // Wait a bit for everything to load
-    setTimeout(() => {
-        const button = document.getElementById('add-medication-btn');
-        console.log('🔍 SIMPLE: Button found:', !!button);
-        
-        if (button) {
-            console.log('✅ SIMPLE: Adding click listener...');
-            
-            // Remove any existing listeners
-            button.onclick = null;
-            
-            // Add simple onclick
-            button.onclick = function() {
-                console.log('🎯 SIMPLE: Button clicked!');
-                alert('Button clicked! Adding medication row...');
-                addMedicationRow();
-                return false;
-            };
-            
-            // Also add event listener as backup
-            button.addEventListener('click', function(e) {
-                console.log('🎯 SIMPLE: Event listener triggered!');
+        const addButton = document.getElementById('add-medication-btn');
+        const container = document.getElementById('medications-container');
+        if (addButton && container && !addButton.dataset.initialized) {
+            addButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 addMedicationRow();
             });
+            addButton.dataset.initialized = 'true';
             
-            console.log('✅ SIMPLE: Click handlers attached');
-        } else {
-            console.error('❌ SIMPLE: Button not found!');
+            if (container.children.length === 0) {
+                addMedicationRow();
+            }
         }
-    }, 500);
-});
+    }, 100);
+}
 
-// Add to window for manual testing
-window.enhancedMedicationInit = enhancedMedicationInit;
-window.initializeMedicationButtonRobust = initializeMedicationButtonRobust;
-window.testButtonClick = function() {
-    console.log('🧪 MANUAL TEST: Testing button click...');
+// EMERGENCY MANUAL TESTING FUNCTIONS
+window.testFormSubmission = function() {
+    console.log('🧪 Manual form submission test...');
+    const form = document.getElementById('prescription-form');
+    if (form) {
+        console.log('✅ Form found');
+        const event = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(event);
+    } else {
+        console.error('❌ Form not found');
+    }
+};
+
+window.testMedicationButton = function() {
+    console.log('🧪 Manual medication button test...');
     const button = document.getElementById('add-medication-btn');
     if (button) {
+        console.log('✅ Button found');
         button.click();
     } else {
-        console.error('Button not found for manual test');
+        console.error('❌ Button not found');
     }
 };

@@ -2,25 +2,12 @@
 import { doc, getDoc, updateDoc, collection, query, where, onSnapshot, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { db } from './firebase-config.js';
 
-// Wait for DOM to be ready before attaching event listeners
-let verifyForm = null;
-let resultsContainer = null;
-
-// Initialize form after DOM loads
-function initializeVerifyForm() {
-    verifyForm = document.getElementById('verify-form');
-    resultsContainer = document.getElementById('results-container');
-    
-    if (verifyForm) {
-        verifyForm.addEventListener('submit', handleVerifySubmit);
-        console.log('✅ Verify form initialized successfully');
-    } else {
-        console.error('❌ Verify form not found');
-    }
-}
+// DOM references
+const verifyForm = document.getElementById('verify-form');
+const resultsContainer = document.getElementById('results-container');
 
 // Handle verification form submission
-async function handleVerifySubmit(e) {
+verifyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const prescriptionId = document.getElementById('prescription-id').value.trim();
@@ -31,8 +18,6 @@ async function handleVerifySubmit(e) {
     }
     
     try {
-        console.log('🔍 Verifying prescription:', prescriptionId);
-        
         // DSA Logic: Hash Table Lookup using Firestore doc().get()
         const prescriptionDoc = await getDoc(doc(db, 'prescriptions', prescriptionId));
         
@@ -43,43 +28,19 @@ async function handleVerifySubmit(e) {
         
         const prescriptionData = prescriptionDoc.data();
         
-        // Update status to "viewed" when pharmacist views it
-        if (prescriptionData.status === 'active') {
-            await updatePrescriptionStatus(prescriptionId, 'viewed');
-            prescriptionData.status = 'viewed'; // Update local data
-            console.log('✅ Prescription status updated to "viewed"');
-        }
-        
         if (prescriptionData.status === 'filled') {
-            showResults('error', 'ALREADY FILLED: This prescription has already been dispensed', prescriptionData, prescriptionId);
+            showResults('error', 'ALREADY FILLED: This prescription has already been dispensed');
             return;
         }
         
-        // Show success for active or viewed prescriptions
-        if (prescriptionData.status === 'viewed' || prescriptionData.status === 'active') {
+        if (prescriptionData.status === 'active') {
             showResults('success', 'VALID: Prescription found', prescriptionData, prescriptionId);
         }
         
     } catch (error) {
-        console.error('❌ Error verifying prescription:', error);
         showResults('error', 'Error verifying prescription: ' + error.message);
     }
-}
-
-// Update prescription status in Firebase
-async function updatePrescriptionStatus(prescriptionId, newStatus) {
-    try {
-        await updateDoc(doc(db, 'prescriptions', prescriptionId), {
-            status: newStatus,
-            viewedDate: newStatus === 'viewed' ? new Date().toISOString() : null,
-            viewedAt: newStatus === 'viewed' ? new Date().toISOString() : null
-        });
-        console.log(`✅ Prescription ${prescriptionId} status updated to ${newStatus}`);
-    } catch (error) {
-        console.error('❌ Error updating prescription status:', error);
-        throw error;
-    }
-}
+});
 
 // Display verification results
 function showResults(type, message, data = null, prescriptionId = null) {
@@ -190,58 +151,41 @@ let recentListener = null;
 export function initializePharmacistDashboard() {
     loadPharmacistStats();
     setupRecentActivity();
+    initializeCharts();
 }
 
 // Load real-time stats for pharmacist
 function loadPharmacistStats() {
     const prescriptionsRef = collection(db, 'prescriptions');
     
-    // Listen to all unfilled prescriptions (active + viewed)
-    onSnapshot(prescriptionsRef, (snapshot) => {
-        const allPrescriptions = snapshot.docs.map(doc => doc.data());
+    // Listen to active prescriptions
+    const activeQuery = query(
+        prescriptionsRef,
+        where('status', '==', 'active'),
+        orderBy('issueDate', 'desc')
+    );
+    
+    activeListener = onSnapshot(activeQuery, (snapshot) => {
+        const activePrescriptions = snapshot.docs.map(doc => doc.data());
         
-        // Count pending (active + viewed, not filled)
-        const pendingCount = allPrescriptions.filter(p => 
-            p.status === 'active' || p.status === 'viewed'
-        ).length;
-        
-        // Count filled prescriptions
-        const filledCount = allPrescriptions.filter(p => p.status === 'filled').length;
-        
-        // Update UI
-        const pendingElement = document.getElementById('pending-verification');
-        const totalElement = document.getElementById('total-verified');
-        
-        if (pendingElement) pendingElement.textContent = pendingCount;
-        if (totalElement) totalElement.textContent = filledCount;
+        // Update pending verification count
+        document.getElementById('pending-verification').textContent = activePrescriptions.length;
         
         // Update active prescriptions list
-        const activePrescriptions = allPrescriptions.filter(p => 
-            p.status === 'active' || p.status === 'viewed'
-        ).sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
-        
         updateActivePrescriptions(activePrescriptions);
     });
     
-    // Get today's filled count
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayISO = today.toISOString().split('T')[0];
+    // Get today's verified count
+    const today = new Date().toISOString().split('T')[0];
+    const todayQuery = query(
+        prescriptionsRef,
+        where('status', '==', 'filled'),
+        where('filledDate', '>=', today + 'T00:00:00.000Z'),
+        where('filledDate', '<=', today + 'T23:59:59.999Z')
+    );
     
-    onSnapshot(prescriptionsRef, (snapshot) => {
-        const todayFilled = snapshot.docs.filter(doc => {
-            const data = doc.data();
-            if (data.status === 'filled' && data.filledDate) {
-                const filledDate = new Date(data.filledDate);
-                return filledDate.toISOString().split('T')[0] === todayISO;
-            }
-            return false;
-        }).length;
-        
-        const verifiedTodayElement = document.getElementById('verified-today');
-        if (verifiedTodayElement) {
-            verifiedTodayElement.textContent = todayFilled;
-        }
+    recentListener = onSnapshot(todayQuery, (snapshot) => {
+        document.getElementById('verified-today').textContent = snapshot.docs.length;
     });
 }
 
@@ -416,61 +360,424 @@ markAsFilled = async function(prescriptionId) {
     }, 1000);
 };
 
-// Update pharmacist dashboard statistics
-async function updatePharmacistStats() {
-    try {
-        const { query, where, getDocs, collection } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js");
-        
-        // Get today's date range
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        // Get all prescriptions
-        const allQuery = query(collection(db, 'prescriptions'));
-        const allSnapshot = await getDocs(allQuery);
-        
-        let verifiedToday = 0;
-        let pendingVerification = 0;
-        let totalVerified = 0;
-        
-        allSnapshot.forEach((doc) => {
-            const data = doc.data();
-            const issueDate = new Date(data.issueDate);
-            
-            if (data.status === 'filled') {
-                totalVerified++;
-                // Check if filled today (approximate)
-                if (issueDate >= today && issueDate < tomorrow) {
-                    verifiedToday++;
+// Chart instances for cleanup
+let dailyActivityChart = null;
+let statusTrendsChart = null;
+let hourlyPatternChart = null;
+
+// Professional color scheme
+const chartColors = {
+    primary: '#2563eb',      // Blue
+    secondary: '#10b981',    // Emerald  
+    accent: '#f59e0b',       // Amber
+    danger: '#ef4444',       // Red
+    success: '#22c55e',      // Green
+    warning: '#f97316',      // Orange
+    info: '#06b6d4',         // Cyan
+    gray: '#6b7280'          // Gray
+};
+
+// Chart configuration defaults
+const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'top',
+            labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: {
+                    size: 12,
+                    family: "'Inter', sans-serif"
                 }
-            } else if (data.status === 'active') {
-                pendingVerification++;
             }
+        },
+        tooltip: {
+            backgroundColor: 'rgba(17, 24, 39, 0.95)',
+            titleColor: '#f9fafb',
+            bodyColor: '#f9fafb',
+            borderColor: '#374151',
+            borderWidth: 1,
+            cornerRadius: 8,
+            displayColors: true,
+            intersect: false,
+            mode: 'index'
+        }
+    },
+    scales: {
+        x: {
+            grid: {
+                color: 'rgba(156, 163, 175, 0.1)',
+                borderColor: 'rgba(156, 163, 175, 0.2)'
+            },
+            ticks: {
+                color: '#6b7280',
+                font: {
+                    size: 11,
+                    family: "'Inter', sans-serif"
+                }
+            }
+        },
+        y: {
+            grid: {
+                color: 'rgba(156, 163, 175, 0.1)',
+                borderColor: 'rgba(156, 163, 175, 0.2)'
+            },
+            ticks: {
+                color: '#6b7280',
+                font: {
+                    size: 11,
+                    family: "'Inter', sans-serif"
+                }
+            },
+            beginAtZero: true
+        }
+    }
+};
+
+// Professional Chart Management System
+class PharmacyChartManager {
+    constructor() {
+        this.charts = {};
+        this.chartTheme = this.getChartTheme();
+        this.initializeCharts();
+        this.setupThemeListener();
+    }
+    
+    getChartTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        return {
+            backgroundColor: isDark ? 'rgba(30, 41, 59, 0.6)' : '#ffffff',
+            textColor: isDark ? '#e2e8f0' : '#334155',
+            gridColor: isDark ? 'rgba(71, 85, 105, 0.3)' : 'rgba(148, 163, 184, 0.2)',
+            borderColor: isDark ? 'rgba(71, 85, 105, 0.5)' : 'rgba(203, 213, 225, 0.5)',
+            colors: {
+                primary: isDark ? '#60a5fa' : '#3b82f6',
+                success: isDark ? '#34d399' : '#10b981',
+                warning: isDark ? '#fbbf24' : '#f59e0b',
+                error: isDark ? '#f87171' : '#ef4444',
+                info: isDark ? '#a78bfa' : '#8b5cf6',
+                secondary: isDark ? '#94a3b8' : '#64748b'
+            }
+        };
+    }
+    
+    initializeCharts() {
+        this.initializeDailyActivityChart();
+        this.initializeStatusTrendsChart();
+    }
+    
+    initializeDailyActivityChart() {
+        const ctx = document.getElementById('daily-activity-chart');
+        if (!ctx) return;
+        
+        // Generate sample data for last 7 days
+        const labels = [];
+        const verificationData = [];
+        const approvalData = [];
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+            
+            // Generate realistic sample data
+            verificationData.push(Math.floor(Math.random() * 50) + 20);
+            approvalData.push(Math.floor(Math.random() * 45) + 15);
+        }
+        
+        this.charts.dailyActivity = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Verifications',
+                        data: verificationData,
+                        borderColor: this.chartTheme.colors.primary,
+                        backgroundColor: `${this.chartTheme.colors.primary}20`,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: this.chartTheme.colors.primary,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: this.chartTheme.colors.primary,
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 3
+                    },
+                    {
+                        label: 'Approvals',
+                        data: approvalData,
+                        borderColor: this.chartTheme.colors.success,
+                        backgroundColor: `${this.chartTheme.colors.success}20`,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: this.chartTheme.colors.success,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: this.chartTheme.colors.success,
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 3
+                    }
+                ]
+            },
+            options: this.getLineChartOptions('Daily Activity', 'Prescriptions')
+        });
+    }
+    
+    initializeStatusTrendsChart() {
+        const ctx = document.getElementById('status-trends-chart');
+        if (!ctx) return;
+        
+        // Generate sample data for last 30 days (weekly points)
+        const labels = [];
+        const activeData = [];
+        const filledData = [];
+        const expiredData = [];
+        
+        for (let i = 4; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - (i * 7));
+            labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            
+            activeData.push(Math.floor(Math.random() * 40) + 60);
+            filledData.push(Math.floor(Math.random() * 35) + 45);
+            expiredData.push(Math.floor(Math.random() * 10) + 2);
+        }
+        
+        this.charts.statusTrends = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Active',
+                        data: activeData,
+                        borderColor: this.chartTheme.colors.primary,
+                        backgroundColor: `${this.chartTheme.colors.primary}15`,
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: this.chartTheme.colors.primary,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Filled',
+                        data: filledData,
+                        borderColor: this.chartTheme.colors.success,
+                        backgroundColor: `${this.chartTheme.colors.success}15`,
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: this.chartTheme.colors.success,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Expired',
+                        data: expiredData,
+                        borderColor: this.chartTheme.colors.warning,
+                        backgroundColor: `${this.chartTheme.colors.warning}15`,
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: this.chartTheme.colors.warning,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }
+                ]
+            },
+            options: this.getLineChartOptions('Status Trends', 'Prescriptions')
+        });
+    }
+    
+    getLineChartOptions(title, yAxisLabel, showArea = false) {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        color: this.chartTheme.textColor,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 12,
+                            weight: '500'
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: this.chartTheme.backgroundColor,
+                    titleColor: this.chartTheme.textColor,
+                    bodyColor: this.chartTheme.textColor,
+                    borderColor: this.chartTheme.borderColor,
+                    borderWidth: 1,
+                    cornerRadius: 12,
+                    padding: 12,
+                    titleFont: {
+                        family: 'Inter, system-ui, sans-serif',
+                        size: 13,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        family: 'Inter, system-ui, sans-serif',
+                        size: 12,
+                        weight: '500'
+                    },
+                    displayColors: true,
+                    usePointStyle: true,
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].label;
+                        },
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: this.chartTheme.textColor,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 11,
+                            weight: '500'
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: true,
+                    grid: {
+                        color: this.chartTheme.gridColor,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: this.chartTheme.textColor,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 11,
+                            weight: '500'
+                        },
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : null;
+                        }
+                    }
+                }
+            },
+            elements: {
+                line: {
+                    borderCapStyle: 'round',
+                    borderJoinStyle: 'round'
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutCubic'
+            }
+        };
+    }
+    
+    setupThemeListener() {
+        // Listen for theme changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'data-theme') {
+                    this.updateChartsTheme();
+                }
+            });
         });
         
-        // Update the UI
-        document.getElementById('verified-today').textContent = verifiedToday;
-        document.getElementById('pending-verification').textContent = pendingVerification;
-        document.getElementById('total-verified').textContent = totalVerified;
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    }
+    
+    updateChartsTheme() {
+        this.chartTheme = this.getChartTheme();
         
-    } catch (error) {
-        console.error('Error updating pharmacist stats:', error);
+        Object.keys(this.charts).forEach(chartKey => {
+            const chart = this.charts[chartKey];
+            if (chart) {
+                // Update chart colors based on new theme
+                chart.options.plugins.legend.labels.color = this.chartTheme.textColor;
+                chart.options.plugins.tooltip.backgroundColor = this.chartTheme.backgroundColor;
+                chart.options.plugins.tooltip.titleColor = this.chartTheme.textColor;
+                chart.options.plugins.tooltip.bodyColor = this.chartTheme.textColor;
+                chart.options.plugins.tooltip.borderColor = this.chartTheme.borderColor;
+                chart.options.scales.x.ticks.color = this.chartTheme.textColor;
+                chart.options.scales.y.ticks.color = this.chartTheme.textColor;
+                chart.options.scales.y.grid.color = this.chartTheme.gridColor;
+                
+                chart.update('none');
+            }
+        });
+    }
+    
+    // Method to update charts with real data
+    updateChartData(chartName, newData) {
+        if (this.charts[chartName]) {
+            this.charts[chartName].data = newData;
+            this.charts[chartName].update();
+        }
+    }
+    
+    // Method to destroy all charts (cleanup)
+    destroyCharts() {
+        Object.keys(this.charts).forEach(chartKey => {
+            if (this.charts[chartKey]) {
+                this.charts[chartKey].destroy();
+            }
+        });
+        this.charts = {};
     }
 }
 
-// Cleanup function
-export function cleanupPharmacistDashboard() {
-    if (activeListener) {
-        activeListener();
-        activeListener = null;
-    }
-    if (recentListener) {
-        recentListener();
-        recentListener = null;
-    }
-}
+// Initialize charts when DOM is loaded
+let pharmacyChartManager = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize charts after a short delay to ensure DOM is ready
+    setTimeout(() => {
+        pharmacyChartManager = new PharmacyChartManager();
+        console.log('✅ Pharmacy charts initialized');
+    }, 500);
+});
+
+// Export for potential external use
+window.pharmacyChartManager = pharmacyChartManager;
 
 // Force enable paste functionality for prescription ID input
 document.addEventListener('DOMContentLoaded', function() {
@@ -544,10 +851,7 @@ window.pasteFromClipboard = async function() {
 
 // Initialize dashboard and test paste functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📋 Page loaded, initializing pharmacist dashboard...');
-    
-    // Initialize the verify form first
-    initializeVerifyForm();
+    console.log('Page loaded, initializing pharmacist dashboard...');
     
     // Initialize dashboard features after authentication is verified
     setTimeout(() => {

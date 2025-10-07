@@ -660,7 +660,7 @@
   color: var(--error);
 }
 
-/* Modal Components - Enhanced with Vibrant Accents */
+/* Modal Components */
 .modal {
   display: none;
   position: fixed;
@@ -669,81 +669,32 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, 
-    rgba(99, 102, 241, 0.15), 
-    rgba(22, 25, 37, 0.8));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(22, 25, 37, 0.5);
 }
 
 .modal-content {
   background: var(--surface);
   margin: 5% auto;
-  border-radius: 20px;
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
-  animation: modalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 12px 48px rgba(99, 102, 241, 0.3), 
-              0 4px 16px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.modal-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    #6366F1 0%, 
-    #3B82F6 33%, 
-    #10B981 66%, 
-    #F59E0B 100%);
+  animation: modalSlide 0.3s ease-out;
+  border: 1px solid var(--border-light);
 }
 
 @keyframes modalSlide {
-  from { 
-    transform: translateY(-80px) scale(0.95); 
-    opacity: 0; 
-  }
-  to { 
-    transform: translateY(0) scale(1); 
-    opacity: 1; 
-  }
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #6366F1, #3B82F6);
+  background: var(--gradient-primary);
   color: var(--text-inverse);
-  padding: 1.5rem 2rem;
-  border-radius: 20px 20px 0 0;
+  padding: 20px 30px;
+  border-radius: 12px 12px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.modal-header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
-  border-radius: 50%;
-}
-
-.modal-header h2 {
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
-  position: relative;
-  z-index: 1;
 }
 
 .close {
@@ -752,43 +703,120 @@
   font-weight: bold;
   cursor: pointer;
   line-height: 1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
+  transition: opacity 0.3s ease;
 }
 
 .close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg) scale(1.1);
+  opacity: 0.7;
 }
 
-.close:active {
-  transform: rotate(90deg) scale(0.95);
+/* Prescription ID Modal Styles */
+.prescription-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999 !important;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: auto !important;
+    visibility: visible !important;
 }
 
-/* Dark theme modal */
-[data-theme="dark"] .modal {
-  background: radial-gradient(circle at center, 
-    rgba(99, 102, 241, 0.2), 
-    rgba(15, 23, 42, 0.9));
+.prescription-modal-overlay.show {
+    opacity: 1 !important;
 }
 
-[data-theme="dark"] .modal-content {
-  background: rgba(30, 41, 59, 0.98);
-  border-color: rgba(129, 140, 248, 0.3);
-  box-shadow: 0 12px 60px rgba(99, 102, 241, 0.4), 
-              0 4px 20px rgba(0, 0, 0, 0.4);
+.prescription-modal {
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 450px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme="dark"] .modal-header {
-  background: linear-gradient(135deg, #818CF8, #60A5FA);
+.prescription-modal-overlay.show .prescription-modal {
+    transform: scale(1) translateY(0);
+}
+
+.prescription-modal-header {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prescription-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.prescription-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.prescription-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.prescription-modal-body {
+    padding: 2rem;
+}
+
+.prescription-id-box {
+    background: var(--background);
+    border: 2px solid var(--primary-500);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.prescription-id-box code {
+    font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-600);
+    letter-spacing: 0.5px;
+    word-break: break-all;
+    display: block;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .prescription-modal {
+    background: rgba(30, 41, 59, 0.98);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+[data-theme="dark"] .prescription-id-box {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: var(--primary-400);
+}
+
+[data-theme="dark"] .prescription-id-box code {
+    color: var(--primary-400);
 }
 
 /* Main Grid Layout */
@@ -935,6 +963,127 @@
 
 .btn-create:hover {
   background: #3a5558;
+}
+
+/* Professional Charts Section */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chart-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.chart-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .chart-card {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(71, 85, 105, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .chart-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.chart-header {
+    padding: 1.5rem 1.5rem 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.chart-period {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: var(--primary-50);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .chart-period {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-300);
+}
+
+.chart-wrapper {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    height: 300px;
+    position: relative;
+}
+
+.chart-wrapper canvas {
+    max-height: 100% !important;
+}
+
+/* Chart Statistics */
+.chart-stats {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    background: var(--background);
+    border-top: 1px solid var(--border);
+}
+
+.chart-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.chart-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-600);
+    margin-bottom: 0.25rem;
+}
+
+.chart-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Responsive Charts */
+@media (max-width: 768px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .chart-wrapper {
+        height: 250px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
 }
 
 /* Responsive Design */

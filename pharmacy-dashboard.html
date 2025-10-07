@@ -10,8 +10,16 @@
     <link rel="stylesheet" href="css/globals.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="theme-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
     <div class="app-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -72,12 +80,6 @@
                     <p class="dashboard-subtitle">Verify and manage prescriptions</p>
                 </div>
                 <div class="header-right">
-                    <!-- Theme Toggle Button -->
-                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                        <svg class="theme-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                    </button>
                     <div class="user-info">
                         <div class="user-avatar">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -94,52 +96,25 @@
                 </div>
             </header>
 
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Verified Today</div>
-                        <div class="stat-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12,6 12,12 16,14"/>
-                            </svg>
-                        </div>
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Daily Verification Activity</div>
+                        <div class="chart-period">Last 7 days</div>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="verified-today">0</div>
-                        <div class="stat-label">Today's activity</div>
+                    <div class="chart-wrapper">
+                        <canvas id="daily-activity-chart"></canvas>
                     </div>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Pending Verification</div>
-                        <div class="stat-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 6v6l4 2"/>
-                            </svg>
-                        </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Prescription Status Trends</div>
+                        <div class="chart-period">Last 30 days</div>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="pending-verification">0</div>
-                        <div class="stat-label">Awaiting verification</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Total Verified</div>
-                        <div class="stat-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-verified">0</div>
-                        <div class="stat-label">All time</div>
+                    <div class="chart-wrapper">
+                        <canvas id="status-trends-chart"></canvas>
                     </div>
                 </div>
             </div>
