@@ -1,0 +1,1082 @@
+/* RESTORE NORMAL CURSOR BEHAVIOR */
+* {
+    cursor: auto;
+}
+
+/* Normal cursor behavior restored */
+
+/* Global CSS Variables and Theme System */
+:root {
+  /* Light Theme Colors - More Vibrant */
+  --primary-900: #0F172A;
+  --primary-700: #1E40AF;
+  --primary-600: #2563EB;
+  --primary-500: #3B82F6;
+  --primary-300: #60A5FA; 
+  --primary-200: #93C5FD;
+  --primary-100: #DBEAFE;
+  --primary-50: #EFF6FF;
+  --primary-25: #F8FAFF;
+  --accent: #6366F1;
+  
+  /* Semantic Colors - Light Theme with More Color */
+  --background: #F8FAFC;
+  --background-secondary: #FFFFFF;
+  --background-tertiary: #F1F5F9;
+  --surface: #FFFFFF;
+  --surface-hover: #F1F5F9;
+  
+  /* Text Colors */
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-inverse: #FFFFFF;
+  
+  /* Status Colors - More Vibrant */
+  --success: #059669;
+  --success-light: #D1FAE5;
+  --success-100: #DCFCE7;
+  --success-700: #15803D;
+  --warning: #D97706;
+  --warning-light: #FEF3C7;
+  --warning-100: #FEF3C7;
+  --warning-700: #B45309;
+  --error: #DC2626;
+  --error-700: #B91C1C;
+  --error-600: #DC2626;
+  --error-200: #FECACA;
+  --error-100: #FEE2E2;
+  --error-light: #FEE2E2;
+  --info: #2563EB;
+  --info-light: #DBEAFE;
+  
+  /* Border Colors */
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --border-medium: #E5E7EB;
+  --border-dark: #D1D5DB;
+  
+  /* Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-heavy: rgba(0, 0, 0, 0.15);
+  
+  /* Layout */
+  --sidebar-width: 280px;
+  --topbar-height: 80px;
+}
+
+/* Dark Theme - Premium Version */
+[data-theme="dark"] {
+  /* Dark Theme Colors - Matching Hero Quality */
+  --background: #0F172A;
+  --background-secondary: #1E293B;
+  --background-tertiary: #334155;
+  --surface: #1E293B;
+  --surface-hover: #334155;
+  
+  /* Dark Primary Colors */
+  --primary-900: #0F172A;
+  --primary-700: #1E40AF;
+  --primary-600: #2563EB;
+  --primary-500: #3B82F6;
+  --primary-300: #60A5FA; 
+  --primary-200: #93C5FD;
+  --primary-100: #1E293B;
+  --primary-50: #0F172A;
+  --primary-25: #0F172A;
+  
+  /* Text Colors - Dark with Better Contrast */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-inverse: #0F172A;
+  
+  /* Adjusted Status Colors for Dark */
+  --success: #10B981;
+  --success-light: #064E3B;
+  --success-100: #064E3B;
+  --success-700: #059669;
+  --warning: #F59E0B;
+  --warning-light: #451A03;
+  --warning-100: #451A03;
+  --warning-700: #D97706;
+  --error: #EF4444;
+  --error-light: #7F1D1D;
+  --info: #3B82F6;
+  --info-light: #1E3A8A;
+  
+  /* Dark Border Colors */
+  --border: #334155;
+  --border-light: #475569;
+  --border-medium: #64748B;
+  --border-dark: #94A3B8;
+  
+  /* Dark Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --shadow-medium: rgba(0, 0, 0, 0.3);
+  --shadow-heavy: rgba(0, 0, 0, 0.4);
+}
+
+/* Base Styles - Force Inter Font Everywhere */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-weight: 400;
+}
+
+/* Typography System - Inter Font with Clear Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  color: var(--text-primary) !important;
+  font-weight: 700 !important; /* Bold for all headings */
+  line-height: 1.2 !important;
+  margin-bottom: 0.75rem !important;
+  letter-spacing: -0.025em !important;
+}
+
+h1 { 
+  font-size: 3rem !important; 
+  font-weight: 800 !important; /* Extra bold for main headings */
+  letter-spacing: -0.05em !important;
+}
+h2 { 
+  font-size: 2.25rem !important; 
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+}
+h3 { 
+  font-size: 1.875rem !important; 
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+}
+h4 { 
+  font-size: 1.5rem !important; 
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+h5 { 
+  font-size: 1.25rem !important; 
+  font-weight: 600 !important;
+}
+h6 { 
+  font-size: 1.125rem !important; 
+  font-weight: 600 !important;
+}
+
+p {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  color: var(--text-secondary) !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important; /* Light body text */
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Comprehensive Text Hierarchy Enforcement */
+
+/* Primary Headings - Bold and Large */
+.hero-title,
+h1,
+.h1 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Dashboard Main Title */
+.dashboard-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Section Titles */
+.section-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.01em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Secondary Headings */
+.section-subtitle,
+h2,
+.h2 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 2.25rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.03em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Tertiary Headings */
+.card-title,
+.stat-label,
+h3,
+.h3 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.875rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Small Headings */
+h4, h5, h6,
+.h4, .h5, .h6 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Body Text - Light and Readable */
+p,
+.description,
+.text-body,
+.card-text,
+.dashboard-subtitle {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Navigation and Menu Items */
+.nav-link,
+.nav-text,
+.sidebar-nav a,
+.menu-item {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* User Info */
+.user-name {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+.user-role {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Buttons - Medium Weight */
+.btn,
+button:not(.prescription-id) {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.025em !important;
+}
+
+/* Form Elements */
+input:not([type="submit"]):not([type="button"]),
+textarea,
+select,
+label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+input:not([type="submit"]):not([type="button"]),
+textarea,
+select {
+    font-weight: 400 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+}
+
+label {
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Form Section Titles */
+.form-section-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Small Text and Captions */
+.text-small,
+.caption,
+.metadata,
+small {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+    color: var(--text-muted) !important;
+}
+
+/* Stats and Numbers - Medium Weight for Emphasis */
+.stat-value,
+.stat-number,
+.metric-value,
+.count {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    line-height: 1 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Stats Labels */
+.stat-label,
+.stat-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Additional Typography Elements */
+a {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+button, .btn {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+input, textarea, select {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Navigation and Menu Text */
+nav, .nav, .menu {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Small Text */
+small, .text-sm {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* Large Text */
+.text-lg {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Typography Utility Classes */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+
+/* Font Weight Utilities */
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+/* Font Size Utilities */
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+/* COMPREHENSIVE INTER FONT ENFORCEMENT - OVERRIDE ALL */
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* Ensure all text elements use Inter */
+body, body *,
+html, html *,
+div, span, p, a, button, input, textarea, select, option, label,
+h1, h2, h3, h4, h5, h6,
+.sidebar, .sidebar *,
+.dashboard, .dashboard *,
+.content, .content *,
+.form, .form *,
+.card, .card *,
+.nav, .nav *,
+.header, .header *,
+.main, .main *,
+.section, .section *,
+.component, .component *,
+.modal, .modal *,
+.dropdown, .dropdown *,
+.tooltip, .tooltip *,
+.table, .table *,
+.list, .list *,
+.grid, .grid *,
+.flex, .flex *,
+.container, .container *,
+.wrapper, .wrapper * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* Text Hierarchy Enforcement */
+h1, .h1, .hero-title, .page-title, .main-title, .dashboard-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 2.5rem !important;
+  line-height: 1.2 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.02em !important;
+}
+
+h2, .h2, .section-title, .card-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.875rem !important;
+  line-height: 1.3 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.01em !important;
+}
+
+h3, .h3, .subsection-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  line-height: 1.4 !important;
+  color: var(--text-primary) !important;
+}
+
+h4, h5, h6, .h4, .h5, .h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  line-height: 1.4 !important;
+}
+
+/* Body Text - Light Weight */
+p, .text-body, .description, .content-text,
+.dashboard-subtitle, .card-text, .info-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Navigation and UI Elements */
+.nav-text, .menu-item, .sidebar-nav a, .nav-link {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Buttons */
+button, .btn, input[type="submit"], input[type="button"] {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+}
+
+/* Form Elements */
+input, textarea, select, label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+input, textarea, select {
+  font-weight: 400 !important;
+  font-size: 0.9rem !important;
+}
+
+label {
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  color: var(--text-primary) !important;
+}
+
+/* Stats and Numbers */
+.stat-number, .stat-value, .metric-value, .count {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 2.5rem !important;
+  line-height: 1 !important;
+  color: var(--text-primary) !important;
+}
+
+.stat-label, .stat-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Small Text */
+small, .text-small, .caption, .metadata {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 0.8rem !important;
+  color: var(--text-muted) !important;
+}
+
+/* User Info */
+.user-name {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  color: var(--text-primary) !important;
+}
+
+.user-role {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 0.8rem !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Force visibility for all text */
+* {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Global CSS Variables and Theme System */
+:root {
+  /* Light Theme Colors - More Vibrant */
+  --primary-900: #0F172A;
+  --primary-700: #1E40AF;
+  --primary-600: #2563EB;
+  --primary-500: #3B82F6;
+  --primary-300: #60A5FA; 
+  --primary-200: #93C5FD;
+  --primary-100: #DBEAFE;
+  --primary-50: #EFF6FF;
+  --primary-25: #F8FAFF;
+  --accent: #6366F1;
+  
+  /* Semantic Colors - Light Theme with More Color */
+  --background: #F8FAFC;
+  --background-secondary: #FFFFFF;
+  --background-tertiary: #F1F5F9;
+  --surface: #FFFFFF;
+  --surface-hover: #F1F5F9;
+  
+  /* Text Colors */
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-inverse: #FFFFFF;
+  
+  /* Status Colors - More Vibrant */
+  --success: #059669;
+  --success-light: #D1FAE5;
+  --success-100: #DCFCE7;
+  --success-700: #15803D;
+  --warning: #D97706;
+  --warning-light: #FEF3C7;
+  --warning-100: #FEF3C7;
+  --warning-700: #B45309;
+  --error: #DC2626;
+  --error-700: #B91C1C;
+  --error-600: #DC2626;
+  --error-200: #FECACA;
+  --error-100: #FEE2E2;
+  --error-light: #FEE2E2;
+  --info: #2563EB;
+  --info-light: #DBEAFE;
+  
+  /* Border Colors */
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --border-medium: #E5E7EB;
+  --border-dark: #D1D5DB;
+  
+  /* Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-heavy: rgba(0, 0, 0, 0.15);
+  
+  /* Layout */
+  --sidebar-width: 280px;
+  --topbar-height: 80px;
+}
+
+/* Dark Theme - Premium Version */
+[data-theme="dark"] {
+  /* Dark Theme Colors - Matching Hero Quality */
+  --background: #0F172A;
+  --background-secondary: #1E293B;
+  --background-tertiary: #334155;
+  --surface: #1E293B;
+  --surface-hover: #334155;
+  
+  /* Dark Primary Colors */
+  --primary-900: #0F172A;
+  --primary-700: #1E40AF;
+  --primary-600: #2563EB;
+  --primary-500: #3B82F6;
+  --primary-300: #60A5FA; 
+  --primary-200: #93C5FD;
+  --primary-100: #1E293B;
+  --primary-50: #0F172A;
+  --primary-25: #0F172A;
+  
+  /* Text Colors - Dark with Better Contrast */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-inverse: #0F172A;
+  
+  /* Adjusted Status Colors for Dark */
+  --success: #10B981;
+  --success-light: #064E3B;
+  --success-100: #064E3B;
+  --success-700: #059669;
+  --warning: #F59E0B;
+  --warning-light: #451A03;
+  --warning-100: #451A03;
+  --warning-700: #D97706;
+  --error: #EF4444;
+  --error-light: #7F1D1D;
+  --info: #3B82F6;
+  --info-light: #1E3A8A;
+  
+  /* Dark Border Colors */
+  --border: #334155;
+  --border-light: #475569;
+  --border-medium: #64748B;
+  --border-dark: #94A3B8;
+  
+  /* Dark Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --shadow-medium: rgba(0, 0, 0, 0.3);
+  --shadow-heavy: rgba(0, 0, 0, 0.4);
+}
+
+/* Base Styles - Force Inter Font Everywhere */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-weight: 400;
+}
+
+/* Typography System - Inter Font with Clear Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  color: var(--text-primary) !important;
+  font-weight: 700 !important; /* Bold for all headings */
+  line-height: 1.2 !important;
+  margin-bottom: 0.75rem !important;
+  letter-spacing: -0.025em !important;
+}
+
+h1 { 
+  font-size: 3rem !important; 
+  font-weight: 800 !important; /* Extra bold for main headings */
+  letter-spacing: -0.05em !important;
+}
+h2 { 
+  font-size: 2.25rem !important; 
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+}
+h3 { 
+  font-size: 1.875rem !important; 
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+}
+h4 { 
+  font-size: 1.5rem !important; 
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+h5 { 
+  font-size: 1.25rem !important; 
+  font-weight: 600 !important;
+}
+h6 { 
+  font-size: 1.125rem !important; 
+  font-weight: 600 !important;
+}
+
+p {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  color: var(--text-secondary) !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important; /* Light body text */
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Comprehensive Text Hierarchy Enforcement */
+
+/* Primary Headings - Bold and Large */
+.hero-title,
+h1,
+.h1 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Dashboard Main Title */
+.dashboard-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Section Titles */
+.section-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.01em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Secondary Headings */
+.section-subtitle,
+h2,
+.h2 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 2.25rem !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.03em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Tertiary Headings */
+.card-title,
+.stat-label,
+h3,
+.h3 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.875rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Small Headings */
+h4, h5, h6,
+.h4, .h5, .h6 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Body Text - Light and Readable */
+p,
+.description,
+.text-body,
+.card-text,
+.dashboard-subtitle {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Navigation and Menu Items */
+.nav-link,
+.nav-text,
+.sidebar-nav a,
+.menu-item {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* User Info */
+.user-name {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+.user-role {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Buttons - Medium Weight */
+.btn,
+button:not(.prescription-id) {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.025em !important;
+}
+
+/* Form Elements */
+input:not([type="submit"]):not([type="button"]),
+textarea,
+select,
+label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+input:not([type="submit"]):not([type="button"]),
+textarea,
+select {
+    font-weight: 400 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+}
+
+label {
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Form Section Titles */
+.form-section-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Small Text and Captions */
+.text-small,
+.caption,
+.metadata,
+small {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+    color: var(--text-muted) !important;
+}
+
+/* Stats and Numbers - Medium Weight for Emphasis */
+.stat-value,
+.stat-number,
+.metric-value,
+.count {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    line-height: 1 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+/* Stats Labels */
+.stat-label,
+.stat-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Additional Typography Elements */
+a {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--primary-600);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+button, .btn {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+input, textarea, select {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Navigation and Menu Text */
+nav, .nav, .menu {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Small Text */
+small, .text-sm {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* Large Text */
+.text-lg {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Typography Utility Classes */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+
+/* Font Weight Utilities */
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+/* Font Size Utilities */
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+/* Ensure Inter font for all utility classes */
+.font-inter {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.bg-primary { background-color: var(--primary-500); }
+.bg-surface { background-color: var(--surface); }
+.bg-secondary { background-color: var(--background-secondary); }
+
+.border-light { border-color: var(--border-light); }
+.border-medium { border-color: var(--border-medium); }
+.border-dark { border-color: var(--border-dark); }
+
+.shadow-sm { box-shadow: 0 1px 3px var(--shadow-light); }
+.shadow-md { box-shadow: 0 4px 6px var(--shadow-medium); }
+.shadow-lg { box-shadow: 0 10px 15px var(--shadow-heavy); }
+
+.hidden { display: none !important; }
+
+/* Transitions */
+.transition-all { transition: all 0.3s ease; }
+.transition-colors { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+/* Focus States */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(64, 110, 142, 0.3);
+}

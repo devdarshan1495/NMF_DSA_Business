@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Dashboard - MedVerify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/globals.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="theme-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">MedVerify</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <span class="nav-text">Verify</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                    </svg>
+                    <span class="nav-text">Activity</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="nav-item logout-btn">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16,17 21,12 16,7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span class="nav-text">Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">Pharmacy Dashboard</h1>
+                    <p class="dashboard-subtitle">Verify and manage prescriptions</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 8v8"/>
+                                <path d="M8 12h8"/>
+                            </svg>
+                        </div>
+                        <div class="user-details">
+                            <span class="user-name" id="pharmacist-name">Pharmacist</span>
+                            <span class="user-role">Pharmacist</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Verified Today</div>
+                        <div class="stat-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="verified-today">0</div>
+                        <div class="stat-label">Today's activity</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Pending Verification</div>
+                        <div class="stat-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="pending-verification">0</div>
+                        <div class="stat-label">Awaiting verification</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Verified</div>
+                        <div class="stat-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-verified">0</div>
+                        <div class="stat-label">All time</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verify Prescription Section -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        Verify Prescription
+                    </h2>
+                </div>
+                
+                <div class="verification-container">
+                    <div class="verification-instructions">
+                        <div class="instruction-item">
+                            <div class="instruction-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <rect x="7" y="7" width="3" height="9"/>
+                                    <rect x="14" y="7" width="3" height="5"/>
+                                </svg>
+                            </div>
+                            <div class="instruction-content">
+                                <strong>Scan QR Code:</strong> Use your phone camera to scan the patient's QR code
+                            </div>
+                        </div>
+                        <div class="instruction-item">
+                            <div class="instruction-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                    <circle cx="8" cy="12" r="2"/>
+                                    <path d="m16 10 2 2-2 2"/>
+                                </svg>
+                            </div>
+                            <div class="instruction-content">
+                                <strong>Manual Entry:</strong> Type the prescription ID below
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="verify-form" class="verify-form">
+                        <div class="form-group">
+                            <label for="prescription-id">Prescription ID</label>
+                            <div class="input-with-button">
+                                <textarea id="prescription-id" placeholder="Paste prescription ID here" required rows="2"></textarea>
+                                <button type="button" class="btn btn-paste" onclick="pasteFromClipboard()">📋 Paste</button>
+                            </div>
+                            <small class="input-hint">Use Cmd+V to paste the prescription ID</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                            </svg>
+                            Verify Prescription
+                        </button>
+                    </form>
+                    
+                    <div id="results-container" class="results-container"></div>
+                </div>
+            </div>
+
+            <!-- Today's Activity -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                        </svg>
+                        Today's Activity
+                    </h2>
+                </div>
+                <div id="activity-list" class="activity-list">
+                    <p class="no-data">No prescriptions verified today.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/pharmacist.js"></script>
+    <script type="module" src="js/theme.js"></script>
+</body>
+</html>

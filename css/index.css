@@ -1,0 +1,943 @@
+/* Unified Background System */
+html {
+    background: linear-gradient(135deg, 
+                var(--primary-25) 0%, 
+                var(--background) 25%, 
+                var(--primary-50) 50%,
+                var(--surface) 100%);
+    min-height: 100vh;
+}
+
+body {
+    background: transparent;
+    min-height: 100vh;
+}
+
+/* Ensure consistent background for dark mode */
+[data-theme="dark"] html {
+    background: var(--background);
+}
+
+[data-theme="dark"] body {
+    background: transparent;
+}
+
+/* Index/Landing page specific styles */
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--border-light);
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-600);
+    transition: all 0.2s ease;
+}
+
+.nav-brand:hover .logo-icon {
+    transform: scale(1.05);
+    color: var(--primary-700);
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-600);
+    transition: color 0.2s ease;
+}
+
+.nav-brand:hover .brand-name {
+    color: var(--primary-700);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Hero Section */
+.hero {
+    padding: 5rem 2rem 2rem;
+    background: transparent !important;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, var(--primary-50) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, var(--primary-100) 0%, transparent 50%);
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.hero-container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--primary-50);
+    color: var(--primary-700);
+    border: 1px solid var(--primary-200);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    width: fit-content;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(10px);
+    animation: float 6s ease-in-out infinite;
+}
+
+.badge-icon {
+    color: var(--primary-600);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    background: linear-gradient(135deg, var(--text-primary), var(--primary-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.highlight {
+    color: var(--primary-600);
+    position: relative;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0.1em;
+    left: 0;
+    right: 0;
+    height: 0.3em;
+    background: linear-gradient(90deg, var(--primary-200), var(--primary-300));
+    z-index: -1;
+    border-radius: 2px;
+    opacity: 0.7;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-large {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    min-height: 56px;
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-50);
+    color: var(--primary-700);
+    border-color: var(--primary-200);
+}
+
+/* Hero Visual */
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.prescription-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08), 
+                0 8px 16px rgba(0, 0, 0, 0.04);
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+    transition: all 0.4s ease;
+    animation: cardFloat 8s ease-in-out infinite;
+}
+
+.prescription-card:hover {
+    transform: perspective(1000px) rotateY(-2deg) rotateX(2deg) scale(1.02);
+    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.12), 
+                0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: perspective(1000px) rotateY(-5deg) rotateX(5deg) translateY(0px); }
+    50% { transform: perspective(1000px) rotateY(-5deg) rotateX(5deg) translateY(-10px); }
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.card-logo {
+    color: var(--primary-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.patient-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.value {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.medication-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.medication-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--primary-25);
+    border-radius: 8px;
+}
+
+.med-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.med-dosage {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.prescription-id {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--background);
+    border-radius: 8px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.id-label {
+    color: var(--text-secondary);
+}
+
+.id-value {
+    color: var(--text-primary);
+}
+
+.verification-status {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.verification-status.verified {
+    background: var(--success-100);
+    color: var(--success-700);
+    border: 2px solid var(--success-200);
+}
+
+.status-icon {
+    color: var(--success-600);
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2), 0 0 0 4px rgba(34, 197, 94, 0.1); }
+}
+
+/* Features Section */
+.features {
+    padding: 2rem 2rem;
+    background: transparent !important;
+    position: relative;
+}
+
+.features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--background) 100%);
+    z-index: 0;
+}
+
+.features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.75rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+}
+
+.section-description {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: var(--primary-100);
+    color: var(--primary-600);
+    border-radius: 16px;
+    margin: 0 auto 1.5rem;
+}
+
+.feature-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+}
+
+.feature-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+}
+
+/* CTA Section */
+.cta {
+    padding: 6rem 2rem;
+    background: transparent !important;
+}
+
+.cta-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.cta-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.cta-title {
+    font-size: 2.75rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+}
+
+.cta-description {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.cta-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Footer */
+.footer {
+    background: transparent !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.footer-content p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Theme Toggle for Landing Page - FIXED VISIBILITY */
+.theme-toggle {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1.5rem !important;
+    z-index: 9999 !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    border: 2px solid var(--border-medium) !important;
+    background: var(--surface) !important;
+    color: var(--text-primary) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-300);
+    background: var(--primary-50);
+}
+
+.theme-toggle-icon {
+    width: 20px !important;
+    height: 20px !important;
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    pointer-events: none !important;
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+    color: var(--primary-600);
+    transform: rotate(15deg);
+}
+
+[data-theme="dark"] .theme-toggle {
+    border-color: var(--border-medium);
+    background: var(--surface);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    border-color: var(--primary-400);
+    background: var(--primary-900);
+}
+
+[data-theme="dark"] .theme-toggle-icon {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .theme-toggle:hover .theme-toggle-icon {
+    color: var(--primary-400);
+}
+
+/* CRITICAL FIXES */
+
+/* 1. Fix Theme Toggle Icon Visibility */
+.theme-toggle svg,
+.theme-toggle-icon {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--text-primary) !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 2 !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+[data-theme="dark"] .theme-toggle svg,
+[data-theme="dark"] .theme-toggle-icon {
+    color: var(--text-primary) !important;
+    stroke: var(--text-primary) !important;
+}
+
+/* 2. Complete Section Unification - Remove ALL Background Conflicts */
+.hero,
+.features,
+.cta,
+.footer {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+.hero::before,
+.features::before,
+.cta::before {
+    display: none !important;
+}
+
+/* 3. Seamless Section Flow */
+section {
+    border: none !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+/* 4. Enhanced Card Styling for Better Contrast */
+.feature-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .feature-card {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Global Landing Page Font Override - Ensure Inter everywhere */
+.hero-section,
+.hero-section *,
+.features-section,
+.features-section *,
+.card,
+.card *,
+.btn,
+.btn *,
+.navbar,
+.navbar *,
+.footer,
+.footer * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Override any existing font declarations */
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button, input, label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* PREMIUM FONT SIZE ADJUSTMENTS FOR ICON-TEXT HARMONY - LANDING PAGE */
+
+/* Feature icon-text perfect pairing */
+.feature-icon {
+    width: 68px;
+    height: 68px;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.feature-card {
+    padding: 2.5rem;
+}
+
+/* Hero button icon-text harmony */
+.btn-large svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Card elements perfect sizing */
+.card-logo {
+    font-size: 1.5rem;
+    width: 32px;
+    height: 32px;
+}
+
+.label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.med-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+}
+
+.med-dosage {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* Prescription ID perfect monospace sizing */
+.prescription-id {
+    font-size: 0.8rem;
+}
+
+.id-label {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.id-value {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* Verification status icon-text harmony */
+.verification-status {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    gap: 0.4rem;
+}
+
+.status-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Footer brand icon-text pairing */
+.footer-brand {
+    gap: 0.5rem;
+}
+
+.footer-brand svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.footer-content p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+}
+
+/* Navigation link improvements */
+.nav-link {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+/* Perfect theme toggle sizing for landing page */
+.theme-toggle {
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.theme-toggle-icon {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+/* Enhanced responsive font scaling for landing page */
+@media (max-width: 1200px) {
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .cta-title {
+        font-size: 2.25rem;
+    }
+    
+    .feature-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-description {
+        font-size: 1.1rem;
+    }
+    
+    .cta-title {
+        font-size: 1.85rem;
+    }
+    
+    .cta-description {
+        font-size: 1.15rem;
+    }
+    
+    .feature-title {
+        font-size: 1.2rem;
+    }
+    
+    .btn-large {
+        font-size: 1.05rem;
+        padding: 1rem 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.75rem;
+    }
+    
+    .cta-title {
+        font-size: 1.6rem;
+    }
+    
+    .feature-title {
+        font-size: 1.1rem;
+    }
+    
+    .feature-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.6rem;
+    }
+    
+    .theme-toggle {
+        width: 44px !important;
+        height: 44px !important;
+        top: 0.75rem !important;
+        right: 1rem !important;
+    }
+    
+    .theme-toggle-icon {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+
+/* Perfect visual hierarchy enforcement for landing page */
+.hero-title {
+    font-size: 3.5rem !important;
+    font-weight: 900 !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em !important;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Enhanced text rendering for premium feel */
+.hero-title,
+.section-title,
+.cta-title,
+.feature-title,
+.card-title {
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Ensure all icons have consistent baseline alignment with text */
+.feature-card svg,
+.verification-status svg,
+.btn-large svg,
+.footer-brand svg {
+    vertical-align: -0.125em;
+}
+
+/* Perfect icon scaling with text */
+.hero-visual svg {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.card-header svg {
+    width: 1.4em;
+    height: 1.4em;
+}

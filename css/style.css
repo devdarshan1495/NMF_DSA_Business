@@ -1,0 +1,372 @@
+/* Landing Page Specific Styles */
+
+/* Hero Section for Login Page */
+.hero-section {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    background: var(--background);
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Main Layout */
+.main-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--background);
+}
+
+/* Centered Card Layout for Login */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .login-card {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.login-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .login-card:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced Form Styling */
+.form-group, .input-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--surface);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Premium Button Styling */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 48px;
+}
+
+.btn-primary {
+    background: var(--primary-600);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-700);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+}
+
+.btn-secondary:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary-300);
+    transform: translateY(-1px);
+}
+
+.btn-large {
+    padding: 1.25rem 2rem;
+    font-size: 1.125rem;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Professional Design Polish Improvements for Dashboard Forms */
+.form-section {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.form-section:focus-within {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-300);
+}
+
+.form-section h3 {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.section-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    color: var(--primary-500);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Button Variations for Forms */
+.button-secondary-outline,
+.add-medication-btn {
+    background: transparent;
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.button-secondary-outline:hover,
+.add-medication-btn:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-600);
+    color: var(--primary-600);
+    transform: translateY(-1px);
+}
+
+.remove-medication-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.remove-medication-btn:hover {
+    background: var(--error-100);
+    color: var(--error-700);
+    transform: scale(1.1);
+}
+
+.remove-medication-btn::before {
+    content: "×";
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.required {
+    color: var(--error);
+    font-weight: bold;
+}
+
+/* Login Page Enhancements */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-header .logo-icon {
+    color: var(--primary-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.login-header .tagline {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.login-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.login-footer p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.demo-accounts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.demo-account {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    padding: 0.5rem;
+    background: var(--surface-hover);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Global Main Styles Font Override - Ensure Inter everywhere */
+.container,
+.container *,
+.section,
+.section *,
+.auth-form,
+.auth-form *,
+.navbar,
+.navbar *,
+.footer,
+.footer * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 1rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .main-container {
+        padding: 1rem;
+        min-height: calc(100vh - 150px);
+    }
+    
+    .login-card {
+        padding: 2rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+    }
+    
+    .section-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .btn-large {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+}

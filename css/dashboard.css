@@ -1,0 +1,1356 @@
+/* Dashboard Layout - Professional Theme */
+html {
+    background: linear-gradient(135deg, 
+                var(--primary-25) 0%, 
+                var(--background) 25%, 
+                var(--primary-50) 50%,
+                var(--surface) 100%);
+    min-height: 100vh;
+}
+
+body {
+    background: transparent;
+    min-height: 100vh;
+}
+
+/* Dark mode unified background */
+[data-theme="dark"] html {
+    background: var(--background);
+}
+
+[data-theme="dark"] body {
+    background: transparent;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background: transparent;
+}
+
+/* Professional Sidebar */
+.sidebar {
+    width: 260px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .sidebar {
+    background: rgba(15, 23, 42, 0.95);
+    border-right-color: var(--border-medium);
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.sidebar-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--primary-100);
+    border-radius: 8px;
+    color: var(--primary-600);
+    transition: all 0.2s ease;
+}
+
+.logo-icon:hover {
+    background: var(--primary-200);
+    transform: scale(1.05);
+}
+
+.logo-text {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--primary-600);
+    transition: color 0.2s ease;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+[data-theme="dark"] .logo-icon {
+    background: var(--primary-900);
+    color: var(--primary-400);
+}
+
+[data-theme="dark"] .logo-icon:hover {
+    background: var(--primary-800);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow: hidden;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0.25rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: var(--primary-600);
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover {
+    background: var(--primary-50);
+    color: var(--primary-600);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item:hover::before {
+    width: 4px;
+}
+
+.nav-item.active {
+    background: var(--primary-100);
+    color: var(--primary-700);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.active::before {
+    width: 4px;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .nav-item:hover {
+    background: var(--primary-900);
+    color: var(--primary-400);
+}
+
+[data-theme="dark"] .nav-item.active {
+    background: var(--primary-900);
+    color: var(--primary-300);
+}
+
+.nav-text {
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+}
+
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+    color: var(--error-600);
+}
+
+.logout-btn:hover {
+    background: var(--error-50);
+    color: var(--error-700);
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    margin-left: 260px;
+    padding: 2rem;
+    max-width: calc(100vw - 260px);
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .dashboard-header {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .user-avatar {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+}
+
+.dashboard-title {
+    font-size: 2.25rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+}
+
+.dashboard-subtitle {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+}
+
+/* Professional Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-400), var(--primary-600));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: left;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-200);
+}
+
+.stat-card:hover::before {
+    transform: scaleX(1);
+}
+
+[data-theme="dark"] .stat-card {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .stat-card:hover {
+    border-color: var(--primary-700);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.stat-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+}
+
+.stat-icon {
+    color: var(--primary-500);
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover .stat-icon {
+    color: var(--primary-600);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.stat-content {
+    margin-top: 0.5rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* Content section */
+.content-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.content-section:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-200);
+}
+
+[data-theme="dark"] .content-section {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .content-section:hover {
+    border-color: var(--primary-700);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+}
+
+.section-title svg {
+    color: var(--primary-600);
+}
+
+[data-theme="dark"] .section-title svg {
+    color: var(--primary-400);
+}
+
+/* Form styling */
+.form-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .form-section {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+.form-section-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-grid .form-group:nth-child(odd):last-child {
+    grid-column: 1 / -1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    background: var(--surface);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.08);
+    background-color: var(--surface);
+}
+
+/* CREATE PRESCRIPTION BUTTON - SUBTLE LIGHTING */
+.btn-create-prescription,
+.prescription-form .btn-primary,
+button.btn-create-prescription,
+button[type="submit"].btn-create-prescription {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 1.125rem !important;
+    padding: 1.25rem 2.5rem !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2) !important;
+    transition: all 0.3s ease !important;
+    text-transform: none !important;
+    letter-spacing: 0.025em !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    min-height: 56px !important;
+    cursor: pointer !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+.btn-create-prescription:hover,
+.prescription-form .btn-primary:hover,
+button.btn-create-prescription:hover,
+button[type="submit"].btn-create-prescription:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3) !important;
+}
+
+.btn-create-prescription:active,
+.prescription-form .btn-primary:active {
+    transform: translateY(0px) !important;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3) !important;
+}
+
+/* Dark theme button styling */
+[data-theme="dark"] .btn-create-prescription,
+[data-theme="dark"] .prescription-form .btn-primary,
+[data-theme="dark"] button.btn-create-prescription,
+[data-theme="dark"] button[type="submit"].btn-create-prescription {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2) !important;
+}
+
+[data-theme="dark"] .btn-create-prescription:hover,
+[data-theme="dark"] .prescription-form .btn-primary:hover,
+[data-theme="dark"] button.btn-create-prescription:hover,
+[data-theme="dark"] button[type="submit"].btn-create-prescription:hover {
+    background: linear-gradient(135deg, #4ade80, #22c55e) !important;
+    color: #000000 !important;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3) !important;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: relative !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    border: 2px solid var(--border-medium) !important;
+    background: var(--surface) !important;
+    color: var(--text-primary) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    margin-right: 16px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 100 !important;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-300);
+    background: var(--primary-50);
+}
+
+.theme-toggle-icon {
+    width: 20px !important;
+    height: 20px !important;
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    pointer-events: none !important;
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+    color: var(--primary-600);
+    transform: rotate(15deg);
+}
+
+[data-theme="dark"] .theme-toggle {
+    border-color: var(--border-medium);
+    background: var(--surface);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    border-color: var(--primary-400);
+    background: var(--primary-900);
+}
+
+[data-theme="dark"] .theme-toggle-icon {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .theme-toggle:hover .theme-toggle-icon {
+    color: var(--primary-400);
+}
+
+/* MY PRESCRIPTIONS SECTION - COMPACT AND ORGANIZED LAYOUT */
+
+/* Main Prescriptions Management Section */
+.prescriptions-management-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Compact Section Header */
+.prescriptions-section-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    text-align: center;
+}
+
+[data-theme="dark"] .prescriptions-section-header {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+.prescriptions-section-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+    border-radius: 16px 16px 0 0;
+}
+
+.prescriptions-section-header .section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.prescriptions-section-header .section-title svg {
+    color: var(--primary-600);
+    width: 24px;
+    height: 24px;
+}
+
+.prescriptions-section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Compact Filters Container */
+.prescriptions-filters-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 1.25rem;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .prescriptions-filters-container {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+.prescription-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+}
+
+/* Compact Filter Elements */
+.filter-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 180px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+    border-color: var(--primary-400);
+    background: var(--primary-50);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    min-width: 250px;
+}
+
+.search-box:focus-within {
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-box svg {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--text-muted);
+    pointer-events: none;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+}
+
+.search-box input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 100%;
+}
+
+.search-box input:focus {
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Compact Statistics */
+.prescription-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .prescription-stats {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--border-light);
+    transition: all 0.2s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-200);
+}
+
+[data-theme="dark"] .stat-item {
+    background: rgba(51, 65, 85, 0.8);
+    border-color: var(--border-medium);
+}
+
+.stat-item .stat-number {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+    color: var(--primary-600);
+    line-height: 1;
+}
+
+.stat-item .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Compact Prescriptions Container */
+.prescriptions-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    min-height: 300px;
+}
+
+[data-theme="dark"] .prescriptions-container {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border-medium);
+}
+
+.prescriptions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Compact Prescription Placeholder */
+.prescription-placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-muted);
+    background: rgba(var(--primary-50), 0.3);
+    border-radius: 12px;
+    border: 1px dashed var(--border-light);
+}
+
+.prescription-placeholder svg {
+    margin-bottom: 1rem;
+    opacity: 0.5;
+    color: var(--primary-400);
+    width: 48px;
+    height: 48px;
+}
+
+.prescription-placeholder h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.prescription-placeholder p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Compact Loading State */
+.loading-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-light);
+    border-top: 3px solid var(--primary-500);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+/* MEDICATION ROWS - COMPLETE STYLING */
+
+/* Medications Container */
+.medications-section {
+    background: var(--primary-25);
+    border: 1px solid var(--primary-100);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+[data-theme="dark"] .medications-section {
+    background: var(--primary-950);
+    border-color: var(--primary-800);
+}
+
+/* Individual Medication Row */
+.medication-row {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr auto;
+    gap: 1rem;
+    align-items: end;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.medication-row:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-200);
+}
+
+[data-theme="dark"] .medication-row {
+    background: var(--surface);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .medication-row:hover {
+    border-color: var(--primary-700);
+}
+
+/* Remove Medication Button */
+.remove-medication-btn {
+    background: var(--error-500);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+.remove-medication-btn:hover {
+    background: var(--error-600);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.remove-medication-btn:active {
+    transform: scale(0.95);
+}
+
+[data-theme="dark"] .remove-medication-btn {
+    background: var(--error-600);
+}
+
+[data-theme="dark"] .remove-medication-btn:hover {
+    background: var(--error-700);
+}
+
+/* Placeholder for first row */
+.medication-row .placeholder {
+    width: 40px;
+    height: 40px;
+    margin-top: 1.5rem;
+}
+
+/* Add Medication Button */
+.button-secondary-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 2px dashed var(--primary-300);
+    color: var(--primary-600);
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.button-secondary-outline:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-400);
+    color: var(--primary-700);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.button-secondary-outline:active {
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .button-secondary-outline {
+    border-color: var(--primary-600);
+    color: var(--primary-400);
+}
+
+[data-theme="dark"] .button-secondary-outline:hover {
+    background: var(--primary-900);
+    border-color: var(--primary-500);
+    color: var(--primary-300);
+}
+
+/* Form groups within medication rows */
+.medication-row .form-group {
+    margin-bottom: 0;
+}
+
+.medication-row .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.medication-row .form-group input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--surface);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.medication-row .form-group input:focus {
+    outline: none;
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.medication-row .form-group input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+[data-theme="dark"] .medication-row .form-group input {
+    background: var(--background);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .medication-row .form-group input:focus {
+    border-color: var(--primary-500);
+}
+
+/* Required field indicator */
+.medication-row .required {
+    color: var(--error-500);
+    font-weight: bold;
+}
+
+/* Responsive medication rows */
+@media (max-width: 1024px) {
+    .medication-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .medication-row .form-group:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+    
+    .remove-medication-btn,
+    .medication-row .placeholder {
+        grid-column: 2;
+        justify-self: end;
+        margin-top: 0;
+        align-self: start;
+    }
+}
+
+@media (max-width: 768px) {
+    .medication-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .remove-medication-btn,
+    .medication-row .placeholder {
+        grid-column: 1;
+        justify-self: center;
+        margin-top: 1rem;
+    }
+    
+    .medications-section {
+        padding: 1rem;
+    }
+}
+
+/* Section icon styling */
+.section-icon {
+    color: var(--primary-600);
+    margin-right: 0.5rem;
+}
+
+[data-theme="dark"] .section-icon {
+    color: var(--primary-400);
+}
+
+/* Enhanced form section headers */
+.form-section h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border-light);
+    display: flex;
+    align-items: center;
+}
+
+[data-theme="dark"] .form-section h4 {
+    border-bottom-color: var(--border-medium);
+}
+
+/* ENHANCED THEME CONSISTENCY */
+
+/* Better theme transitions for all components */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
+}
+
+/* Dark theme improvements for form elements */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea {
+    background: var(--background);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Dark theme success message */
+[data-theme="dark"] .success-message {
+    background: var(--success-950);
+    border-color: var(--success-800);
+    color: var(--success-300);
+}
+
+/* Dark theme prescription ID display */
+[data-theme="dark"] .prescription-id-display {
+    background: var(--background);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .prescription-id-display code {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+/* Dark theme copy button */
+[data-theme="dark"] .btn-copy {
+    background: var(--primary-600);
+    border-color: var(--primary-500);
+}
+
+[data-theme="dark"] .btn-copy:hover {
+    background: var(--primary-700);
+    border-color: var(--primary-600);
+}
+
+/* Ensure all text is visible in both themes */
+[data-theme="dark"] .content-section h2,
+[data-theme="dark"] .section-header h2,
+[data-theme="dark"] .form-section h4 {
+    color: var(--text-primary);
+}
+
+/* Dark theme grid and layout consistency */
+[data-theme="dark"] .content-grid,
+[data-theme="dark"] .form-grid {
+    color: var(--text-primary);
+}
+
+/* Enhanced hover states for dark theme */
+[data-theme="dark"] .content-section:hover {
+    background: rgba(51, 65, 85, 0.95);
+    border-color: var(--primary-600);
+}
+
+[data-theme="dark"] .stat-card:hover {
+    background: rgba(51, 65, 85, 0.95);
+    border-color: var(--primary-600);
+}
+
+/* Dark theme button consistency */
+[data-theme="dark"] .btn-secondary {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+    background: var(--background);
+    border-color: var(--border-dark);
+}
+
+/* Typography consistency across themes */
+.dashboard-title,
+.section-title,
+.form-section h4,
+.stat-label,
+.user-name,
+.nav-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* Ensure proper contrast in all states */
+.form-group label,
+.medication-row label {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+[data-theme="dark"] .form-group label,
+[data-theme="dark"] .medication-row label {
+    color: var(--text-primary);
+}
+
+/* Enhanced focus states for better accessibility */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-500) !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group select:focus,
+[data-theme="dark"] .form-group textarea:focus {
+    border-color: var(--primary-400) !important;
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.15) !important;
+}
+
+/* MEDICATION BUTTON FIX - Ensure button is clickable */
+#add-medication-btn,
+.button-secondary-outline {
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#add-medication-btn:hover,
+.button-secondary-outline:hover {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure the medications section doesn't interfere */
+.medications-section {
+    position: relative;
+    z-index: 1;
+}
+
+.medications-section * {
+    position: relative;
+}
+
+/* Make sure button is not hidden by any overlay */
+#add-medication-btn::before,
+#add-medication-btn::after {
+    content: none !important;
+}
+
+/* Debug styling to make button more visible */
+#add-medication-btn {
+    min-width: 150px !important;
+    min-height: 40px !important;
+    border: 2px solid var(--primary-500) !important;
+    background: transparent !important;
+    color: var(--primary-500) !important;
+}
