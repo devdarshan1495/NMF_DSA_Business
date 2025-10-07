@@ -1,0 +1,13 @@
+{
+  "name": "pharmacy-management-system",
+  "version": "1.0.0",
+  "description": "A pharmacy management system for prescription uploads",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve . -p 5173",
+    "build": "echo 'Build complete - project is ready for deployment'"
+  },
+  "keywords": ["pharmacy", "prescriptions"],
+  "author": "",
+  "license": "ISC"
+}

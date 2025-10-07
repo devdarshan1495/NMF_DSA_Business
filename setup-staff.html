@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Pharmacy Staff - MedScript</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .setup-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+        .info-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: var(--color-text);
+        }
+        .info-box strong {
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="setup-container">
+            <div class="card">
+                <h2 class="hero-title" style="margin-bottom: 1rem;">Create Pharmacy Staff Account</h2>
+                <p class="hero-subtitle" style="margin-bottom: 2rem;">Set up your first pharmacy staff member to access the dashboard</p>
+
+                <div class="info-box">
+                    <strong>Note:</strong> This page creates a new user account and assigns pharmacy staff privileges.
+                    You'll be able to log in to the pharmacy portal with these credentials.
+                </div>
+
+                <form id="setupForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required minlength="6">
+                        <small style="color: var(--color-text-light);">At least 6 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" required>
+                            <option value="admin">Admin</option>
+                            <option value="pharmacist">Pharmacist</option>
+                            <option value="technician">Technician</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="setupBtn">
+                            <span class="btn-text">Create Staff Account</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+
+                    <div id="setupError" class="error-message hidden"></div>
+                    <div id="setupSuccess" class="success-message hidden" style="margin-top: 2rem;">
+                        <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <h3>Staff Account Created!</h3>
+                        <p id="successMessage"></p>
+                        <a href="/pharmacy.html" class="btn btn-primary" style="margin-top: 1rem; text-decoration: none;">
+                            Go to Pharmacy Portal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+        const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const form = document.getElementById('setupForm');
+        const setupBtn = document.getElementById('setupBtn');
+        const setupError = document.getElementById('setupError');
+        const setupSuccess = document.getElementById('setupSuccess');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setupError.classList.add('hidden');
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            const btnText = setupBtn.querySelector('.btn-text');
+            const btnLoader = setupBtn.querySelector('.btn-loader');
+
+            setupBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+
+            try {
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: fullName
+                        }
+                    }
+                });
+
+                if (signUpError) throw signUpError;
+
+                if (!signUpData.user) {
+                    throw new Error('Failed to create user account');
+                }
+
+                const { data: staffData, error: staffError } = await supabase
+                    .from('pharmacy_staff')
+                    .insert([
+                        {
+                            user_id: signUpData.user.id,
+                            full_name: fullName,
+                            role: role,
+                            is_active: true
+                        }
+                    ])
+                    .select();
+
+                if (staffError) throw staffError;
+
+                form.classList.add('hidden');
+                setupSuccess.classList.remove('hidden');
+                successMessage.textContent = `Account created successfully for ${fullName} (${role}). You can now log in to the pharmacy portal.`;
+
+            } catch (error) {
+                console.error('Setup error:', error);
+                setupError.textContent = error.message || 'Failed to create staff account';
+                setupError.classList.remove('hidden');
+                setupBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

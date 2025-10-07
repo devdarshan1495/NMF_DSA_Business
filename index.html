@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Management System</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <h1>MedScript</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Upload</a>
+                <a href="/pharmacy.html" class="nav-link">Pharmacy Portal</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="hero-section">
+            <h2 class="hero-title">Upload Your Prescription</h2>
+            <p class="hero-subtitle">Submit your prescription securely and get it processed by our pharmacy team</p>
+        </div>
+
+        <div class="card upload-card">
+            <form id="prescriptionForm" class="prescription-form">
+                <div class="form-section">
+                    <h3 class="section-title">Patient Information</h3>
+
+                    <div class="form-group">
+                        <label for="patientName">Full Name</label>
+                        <input type="text" id="patientName" name="patientName" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patientEmail">Email</label>
+                            <input type="email" id="patientEmail" name="patientEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patientPhone">Phone Number</label>
+                            <input type="tel" id="patientPhone" name="patientPhone" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Prescription Details</h3>
+
+                    <div class="form-group">
+                        <label for="doctorName">Doctor's Name</label>
+                        <input type="text" id="doctorName" name="doctorName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes (Optional)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Any special instructions or information..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Upload Prescription</h3>
+
+                    <div class="file-upload-container">
+                        <input type="file" id="prescriptionFile" accept="image/*,.pdf" required hidden>
+                        <label for="prescriptionFile" class="file-upload-area" id="fileUploadArea">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <span class="upload-text">Click to upload or drag and drop</span>
+                            <span class="upload-hint">PDF, PNG, JPG (max 10MB)</span>
+                        </label>
+                        <div id="filePreview" class="file-preview hidden">
+                            <div class="file-info">
+                                <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                                    <polyline points="13 2 13 9 20 9"/>
+                                </svg>
+                                <div class="file-details">
+                                    <p class="file-name" id="fileName"></p>
+                                    <p class="file-size" id="fileSize"></p>
+                                </div>
+                                <button type="button" class="btn-remove" id="removeFile">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-text">Submit Prescription</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="successMessage" class="success-message hidden">
+            <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h3>Prescription Submitted Successfully!</h3>
+            <p>Your prescription has been received. Our pharmacy team will review it shortly.</p>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/js/supabase-client.js"></script>
+    <script type="module" src="/js/upload.js"></script>
+</body>
+</html>

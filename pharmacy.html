@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Portal - MedScript</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/pharmacy.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <h1>MedScript</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Upload</a>
+                <a href="/pharmacy.html" class="nav-link active">Pharmacy Portal</a>
+                <button id="logoutBtn" class="btn-logout hidden">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="loginSection" class="auth-section">
+            <div class="auth-card">
+                <h2 class="auth-title">Pharmacy Portal Login</h2>
+                <p class="auth-subtitle">Access the pharmacy management dashboard</p>
+
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+
+                    <div id="loginError" class="error-message hidden"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="dashboardSection" class="dashboard-section hidden">
+            <div class="dashboard-header">
+                <div>
+                    <h2 class="dashboard-title">Prescription Dashboard</h2>
+                    <p class="dashboard-subtitle">Manage and process prescription submissions</p>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="totalCount">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-card stat-pending">
+                        <span class="stat-value" id="pendingCount">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-card stat-completed">
+                        <span class="stat-value" id="completedCount">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter">
+                        <option value="all">All Prescriptions</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="searchInput">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search by patient name...">
+                </div>
+            </div>
+
+            <div id="prescriptionsContainer" class="prescriptions-grid">
+                <div class="loader-container">
+                    <div class="loader"></div>
+                    <p>Loading prescriptions...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="prescriptionModal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Prescription Details</h3>
+                <button class="modal-close" id="closeModal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalClose">Close</button>
+                <button class="btn btn-primary" id="updateStatusBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/js/supabase-client.js"></script>
+    <script type="module" src="/js/pharmacy.js"></script>
+</body>
+</html>
