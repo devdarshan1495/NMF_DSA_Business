@@ -2,12 +2,25 @@
 import { doc, getDoc, updateDoc, collection, query, where, onSnapshot, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 import { db } from './firebase-config.js';
 
-// DOM references
-const verifyForm = document.getElementById('verify-form');
-const resultsContainer = document.getElementById('results-container');
+// Wait for DOM to be ready before attaching event listeners
+let verifyForm = null;
+let resultsContainer = null;
+
+// Initialize form after DOM loads
+function initializeVerifyForm() {
+    verifyForm = document.getElementById('verify-form');
+    resultsContainer = document.getElementById('results-container');
+    
+    if (verifyForm) {
+        verifyForm.addEventListener('submit', handleVerifySubmit);
+        console.log('✅ Verify form initialized successfully');
+    } else {
+        console.error('❌ Verify form not found');
+    }
+}
 
 // Handle verification form submission
-verifyForm.addEventListener('submit', async (e) => {
+async function handleVerifySubmit(e) {
     e.preventDefault();
     
     const prescriptionId = document.getElementById('prescription-id').value.trim();
@@ -18,6 +31,8 @@ verifyForm.addEventListener('submit', async (e) => {
     }
     
     try {
+        console.log('🔍 Verifying prescription:', prescriptionId);
+        
         // DSA Logic: Hash Table Lookup using Firestore doc().get()
         const prescriptionDoc = await getDoc(doc(db, 'prescriptions', prescriptionId));
         
@@ -28,19 +43,43 @@ verifyForm.addEventListener('submit', async (e) => {
         
         const prescriptionData = prescriptionDoc.data();
         
+        // Update status to "viewed" when pharmacist views it
+        if (prescriptionData.status === 'active') {
+            await updatePrescriptionStatus(prescriptionId, 'viewed');
+            prescriptionData.status = 'viewed'; // Update local data
+            console.log('✅ Prescription status updated to "viewed"');
+        }
+        
         if (prescriptionData.status === 'filled') {
-            showResults('error', 'ALREADY FILLED: This prescription has already been dispensed');
+            showResults('error', 'ALREADY FILLED: This prescription has already been dispensed', prescriptionData, prescriptionId);
             return;
         }
         
-        if (prescriptionData.status === 'active') {
+        // Show success for active or viewed prescriptions
+        if (prescriptionData.status === 'viewed' || prescriptionData.status === 'active') {
             showResults('success', 'VALID: Prescription found', prescriptionData, prescriptionId);
         }
         
     } catch (error) {
+        console.error('❌ Error verifying prescription:', error);
         showResults('error', 'Error verifying prescription: ' + error.message);
     }
-});
+}
+
+// Update prescription status in Firebase
+async function updatePrescriptionStatus(prescriptionId, newStatus) {
+    try {
+        await updateDoc(doc(db, 'prescriptions', prescriptionId), {
+            status: newStatus,
+            viewedDate: newStatus === 'viewed' ? new Date().toISOString() : null,
+            viewedAt: newStatus === 'viewed' ? new Date().toISOString() : null
+        });
+        console.log(`✅ Prescription ${prescriptionId} status updated to ${newStatus}`);
+    } catch (error) {
+        console.error('❌ Error updating prescription status:', error);
+        throw error;
+    }
+}
 
 // Display verification results
 function showResults(type, message, data = null, prescriptionId = null) {
@@ -157,34 +196,52 @@ export function initializePharmacistDashboard() {
 function loadPharmacistStats() {
     const prescriptionsRef = collection(db, 'prescriptions');
     
-    // Listen to active prescriptions
-    const activeQuery = query(
-        prescriptionsRef,
-        where('status', '==', 'active'),
-        orderBy('issueDate', 'desc')
-    );
-    
-    activeListener = onSnapshot(activeQuery, (snapshot) => {
-        const activePrescriptions = snapshot.docs.map(doc => doc.data());
+    // Listen to all unfilled prescriptions (active + viewed)
+    onSnapshot(prescriptionsRef, (snapshot) => {
+        const allPrescriptions = snapshot.docs.map(doc => doc.data());
         
-        // Update pending verification count
-        document.getElementById('pending-verification').textContent = activePrescriptions.length;
+        // Count pending (active + viewed, not filled)
+        const pendingCount = allPrescriptions.filter(p => 
+            p.status === 'active' || p.status === 'viewed'
+        ).length;
+        
+        // Count filled prescriptions
+        const filledCount = allPrescriptions.filter(p => p.status === 'filled').length;
+        
+        // Update UI
+        const pendingElement = document.getElementById('pending-verification');
+        const totalElement = document.getElementById('total-verified');
+        
+        if (pendingElement) pendingElement.textContent = pendingCount;
+        if (totalElement) totalElement.textContent = filledCount;
         
         // Update active prescriptions list
+        const activePrescriptions = allPrescriptions.filter(p => 
+            p.status === 'active' || p.status === 'viewed'
+        ).sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+        
         updateActivePrescriptions(activePrescriptions);
     });
     
-    // Get today's verified count
-    const today = new Date().toISOString().split('T')[0];
-    const todayQuery = query(
-        prescriptionsRef,
-        where('status', '==', 'filled'),
-        where('filledDate', '>=', today + 'T00:00:00.000Z'),
-        where('filledDate', '<=', today + 'T23:59:59.999Z')
-    );
+    // Get today's filled count
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayISO = today.toISOString().split('T')[0];
     
-    recentListener = onSnapshot(todayQuery, (snapshot) => {
-        document.getElementById('verified-today').textContent = snapshot.docs.length;
+    onSnapshot(prescriptionsRef, (snapshot) => {
+        const todayFilled = snapshot.docs.filter(doc => {
+            const data = doc.data();
+            if (data.status === 'filled' && data.filledDate) {
+                const filledDate = new Date(data.filledDate);
+                return filledDate.toISOString().split('T')[0] === todayISO;
+            }
+            return false;
+        }).length;
+        
+        const verifiedTodayElement = document.getElementById('verified-today');
+        if (verifiedTodayElement) {
+            verifiedTodayElement.textContent = todayFilled;
+        }
     });
 }
 
@@ -487,7 +544,10 @@ window.pasteFromClipboard = async function() {
 
 // Initialize dashboard and test paste functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Page loaded, initializing pharmacist dashboard...');
+    console.log('📋 Page loaded, initializing pharmacist dashboard...');
+    
+    // Initialize the verify form first
+    initializeVerifyForm();
     
     // Initialize dashboard features after authentication is verified
     setTimeout(() => {

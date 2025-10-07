@@ -12,7 +12,7 @@ function generatePrescriptionId(dataString) {
 }
 
 // Handle prescription form submission
-function handlePrescriptionSubmission(e) {
+async function handlePrescriptionSubmission(e) {
     e.preventDefault();
     
     // Patient Information
